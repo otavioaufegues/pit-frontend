@@ -3,7 +3,7 @@ import { RELATE_SERVER } from '@env';
 
 //API URL
 //setup in the .env file in root
-export const API_URL = `http://192.168.2.114:3000/api`;
+export const API_URL = `http://192.168.2.108:3000/api`;
 // export const API_URL = `http://192.168.0.2:3000/api`;
 // export const API_URL = `${RELATE_SERVER}/api`;
 
@@ -57,6 +57,7 @@ export const GET_PROJECT = `${API_URL}/project/getProjectsByCategory`;
 export const PROJECT = `${API_URL}/project`;
 
 //PIT CRUD
-export const LIST_PIT = `${API_URL}/pit`;
+export const BASE_URL = `${API_URL}/`;
+export const PIT_URL = `${API_URL}/pit`;
 export const CREATE_PIT = `${API_URL}/pit/register`;
 export const YEAR_PIT = `${API_URL}/pit/anual`;

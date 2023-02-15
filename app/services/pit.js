@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-import { LIST_PIT, CREATE_PIT, YEAR_PIT } from '../constants';
+import { PIT_URL, CREATE_PIT, YEAR_PIT } from '../constants';
 
 export async function listPIT(year) {
   try {
-    return await axios.get(LIST_PIT + '/year/' + year);
+    return await axios.get(PIT_URL + '/year/' + year);
   } catch (e) {
     throw handler(e);
   }
@@ -12,7 +12,7 @@ export async function listPIT(year) {
 
 export async function getPIT(pitId) {
   try {
-    return await axios.get(LIST_PIT + '/' + pitId);
+    return await axios.get(PIT_URL + '/' + pitId);
   } catch (e) {
     throw handler(e);
   }
@@ -28,7 +28,7 @@ export async function createPIT(payload) {
 
 export async function updatePIT(pitId, payload) {
   try {
-    return await axios.put(LIST_PIT + '/' + pitId, payload);
+    return await axios.put(PIT_URL + '/' + pitId, payload);
   } catch (e) {
     throw handler(e);
   }
@@ -36,7 +36,7 @@ export async function updatePIT(pitId, payload) {
 
 export async function removePIT(pitId) {
   try {
-    return await axios.delete(LIST_PIT + '/' + pitId);
+    return await axios.delete(PIT_URL + '/' + pitId);
   } catch (e) {
     throw handler(e);
   }
