@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, View, Button, Keyboard } from 'react-native';
 import { useAsync } from '../../hooks/useAsync';
 import { getAxis } from '../../services/axis';
 import { useAuth } from '../../providers/auth';
+import { AppContext } from '../../providers/app';
 import MaskInput, { Masks } from 'react-native-mask-input';
 import { Slider } from 'react-native-elements';
 
@@ -18,20 +19,12 @@ export default CreatePIT = ({ navigation }) => {
   const [date, setDate] = useState('');
   const [axis, setAxis] = useState([]);
   const [pit, setPit] = useState({});
-  const {
-    execute,
-    response: responseAxis,
-    status: statusAxis,
-    error,
-  } = useAsync(() => getAxis());
 
-  useEffect(() => {
-    if (statusAxis === 'success') {
-      setAxis(responseAxis.data.axis);
-    }
-  }, [statusAxis]);
-  console.log('oi', pit);
-  const [open, setOpen] = useState(false);
+  const [appContext, setAppContext] = useContext(AppContext);
+
+  console.log('c', appContext);
+
+  // const [open, setOpen] = useState(false);
   // const [value, setValue] = useState(null);
   // const [items, setItems] = useState([
   //   { label: 'Apple', value: 'apple' },
@@ -70,7 +63,7 @@ export default CreatePIT = ({ navigation }) => {
   // };
   return (
     <>
-      {statusAxis !== 'success' && <></>}
+      {/* {statusAxis !== 'success' && <></>}
       {statusAxis === 'success' && (
         <View style={styles.container}>
           <View style={styles.container}>
@@ -128,7 +121,7 @@ export default CreatePIT = ({ navigation }) => {
             <Button title="Enviar PIT" />
           </View>
         </View>
-      )}
+      )} */}
     </>
   );
 };

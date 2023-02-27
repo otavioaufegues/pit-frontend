@@ -40,7 +40,7 @@ import ReportEvolutionScreen from './scenes/rit/reports/ReportEvolution';
 import AuthLoading from './scenes/auth/AuthLoading';
 
 import AuthProvider from './providers/auth';
-import AppProvider from './providers/app';
+import { AppProvider } from './providers/app';
 
 const Stack = createStackNavigator();
 
@@ -89,7 +89,7 @@ export default function Router() {
             <Stack.Screen
               name="LoginScreen"
               component={LoginScreen}
-              options={{ title: '' }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen name="UsernameScreen" component={UsernameScreen} />
             <Stack.Screen
