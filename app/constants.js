@@ -3,7 +3,7 @@ import { RELATE_SERVER } from '@env';
 
 //API URL
 //setup in the .env file in root
-export const API_URL = `http://192.168.2.108:3000/api`;
+export const API_URL = `http://192.168.0.35:3000/api`;
 // export const API_URL = `http://192.168.0.2:3000/api`;
 // export const API_URL = `${RELATE_SERVER}/api`;
 
