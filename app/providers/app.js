@@ -1,11 +1,11 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useAsync } from '../hooks/useAsync';
 import { getAxis } from '../services/axis';
 
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [appState, setAppState] = useState([]);
+  const [axis, setAxis] = useState([]);
 
   const {
     execute,
@@ -16,9 +16,15 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     if (statusAxis === 'success') {
-      setAppState(responseAxis.data.axis);
+      setAxis(responseAxis.data.axis);
     }
   }, [statusAxis]);
 
-  return <AppContext.Provider value={appState}>{children}</AppContext.Provider>;
+  const value = useMemo(() => {
+    return { axis };
+  }, [axis]);
+
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
+
+export const useDataProvider = () => useContext(AppContext);

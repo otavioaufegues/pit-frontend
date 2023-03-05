@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, View, Button, Keyboard } from 'react-native';
 import { useAuth } from '../../providers/auth';
-import { AppContext } from '../../providers/app';
+import { useDataProvider } from '../../providers/app';
 import MaskInput, { Masks } from 'react-native-mask-input';
 import { Slider } from 'react-native-elements';
 import { createPIT, handler } from '../../services/pit';
@@ -11,12 +11,11 @@ import DropDownPicker from 'react-native-dropdown-picker';
 
 export default CreatePIT = ({ navigation }) => {
   const { state, createUser } = useAuth();
-  const axis = useContext(AppContext);
+  const { axis } = useDataProvider();
   const regime = state.user.regime;
   const [inputRegime, setInputRegime] = useState(0);
   const [date, setDate] = useState('');
   const [pit, setPit] = useState({});
-
   // const [open, setOpen] = useState(false);
   // const [value, setValue] = useState(null);
   // const [items, setItems] = useState([
@@ -95,7 +94,7 @@ export default CreatePIT = ({ navigation }) => {
             {axis.map((elem) => (
               <View style={styles.InputContainer}>
                 <Text style={styles.defaultFont}>
-                  {elem.name} : {pit[`${elem.ref}`]} Horas
+                  {elem.name}: {pit[`${elem.ref}`] ?? 0} Horas
                 </Text>
                 <Slider
                   value={pit[`${elem.ref}`]}
