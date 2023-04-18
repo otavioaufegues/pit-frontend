@@ -1,124 +1,122 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, View, Button, Keyboard } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '../../providers/auth';
-import { Input, Slider } from 'react-native-elements';
-import {
-  createPIT,
-  getPIT,
-  handler,
-  removePIT,
-  updatePIT,
-} from '../../services/pit';
-import MaskInput, { Masks } from 'react-native-mask-input';
-import { formatDate } from '../../helper/formatDate';
-import { getLastDay } from '../../helper/getLastDay';
+import { Slider, Button } from 'react-native-elements';
+import { getPIT, handler, removePIT, updatePIT } from '../../services/pit';
+import Icon from 'react-native-vector-icons/FontAwesome';
+// import MaskInput, { Masks } from 'react-native-mask-input';
+// import { formatDate } from '../../helper/formatDate';
+// import { getLastDay } from '../../helper/getLastDay';
 import { useAsync } from '../../hooks/useAsync';
-import { useIsFocused } from '@react-navigation/native';
+// import { useIsFocused } from '@react-navigation/native';
+import moment from 'moment';
+import { useDataProvider } from '../../providers/app';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default UpdatePIT = ({ navigation, route }) => {
-  const { state, createUser } = useAuth();
-  const pitId = route.params.pitId;
+  const { state } = useAuth();
+  const { axis } = useDataProvider();
+  const { pitId, year } = route.params;
   const [regime, setRegime] = useState(state.user.regime);
   const [inputRegime, setInputRegime] = useState(0);
-  const [date, setDate] = useState('');
-  const [teaching, setTeaching] = useState(0);
-  const [researching, setResearching] = useState(0);
-  const [extension, setExtension] = useState(0);
-  const [management, setManagement] = useState(0);
-  const isFocused = useIsFocused();
-
-  const { execute, response, status, error } = useAsync(
-    () => getPIT(pitId),
-    false,
+  const [date, setDate] = useState();
+  const [pit, setPit] = useState(
+    axis.reduce((acc, eixo) => {
+      acc[eixo.ref] = 0;
+      return acc;
+    }, {}),
   );
+  const [show, setShow] = useState(false);
 
-  useEffect(() => {
-    if (isFocused) {
-      execute();
-    }
-  }, [isFocused]);
+  // // const isFocused = useIsFocused();
+  // useEffect(() => {
+  //   if (isFocused) {
+  //     execute();
+  //   }
+  // }, [isFocused]);
+
+  const showPicker = () => {
+    setShow(true);
+  };
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
+  const { execute, response, status, error } = useAsync(() => getPIT(pitId));
 
   useEffect(() => {
     if (status === 'success') {
-      setTeaching(response.data.pit.teaching);
-      setManagement(response.data.pit.management);
-      setExtension(response.data.pit.extension);
-      setResearching(response.data.pit.researching);
       const dt = new Date(response.data.pit.dt_inicial);
-      setDate(dt.toLocaleDateString('pt-BR', { timeZone: 'UTC' }).toString());
+      setDate(dt);
+      const keysToExtract = axis.map((obj) => obj.ref);
+      const extractedValues = Object.fromEntries(
+        Object.entries(response.data.pit).filter(([key, value]) =>
+          keysToExtract.includes(key),
+        ),
+      );
+      setPit(extractedValues);
     }
   }, [status]);
 
   useEffect(() => {
-    let sumInput = teaching + researching + extension + management;
-    setInputRegime(sumInput);
-  }, [teaching, researching, extension, management]);
+    const sumRegime = Object.values(pit).reduce((sum, valor) => sum + valor, 0);
+    setInputRegime(sumRegime);
+  }, [pit]);
 
-  const submitPit = () => {
-    if (date.length < 10) {
-      Alert.alert('Atenção', 'Insira a data de início!');
-      return;
-    }
+  // const submitPit = () => {
+  //   if (date.length < 10) {
+  //     Alert.alert('Atenção', 'Insira a data de início!');
+  //     return;
+  //   }
 
-    if (inputRegime > regime) {
-      Alert.alert('Atenção', 'Número de horas excedido!');
-      return;
-    }
+  //   if (inputRegime > regime) {
+  //     Alert.alert('Atenção', 'Número de horas excedido!');
+  //     return;
+  //   }
 
-    const dt_inicial = formatDate(date);
-    try {
-      updatePIT(pitId, {
-        dt_inicial: dt_inicial,
-        teaching: teaching,
-        researching: researching,
-        extension: extension,
-        management: management,
-        leave: false,
-      });
+  //   const dt_inicial = formatDate(date);
+  //   try {
+  //     updatePIT(pitId, {
+  //       dt_inicial: dt_inicial,
+  //       teaching: teaching,
+  //       researching: researching,
+  //       extension: extension,
+  //       management: management,
+  //       leave: false,
+  //     });
 
-      navigation.navigate('PITScreen');
-    } catch (e) {
-      throw handler(e);
-    }
-  };
+  //     navigation.navigate('PITScreen');
+  //   } catch (e) {
+  //     throw handler(e);
+  //   }
+  // };
 
-  const removePit = () => {
-    Alert.alert('Atenção', 'Tem certeza que deseja remover esta versão Pit?', [
-      {
-        text: 'Cancelar',
-      },
-      {
-        text: 'Sim',
-        onPress: () => {
-          removePIT(pitId);
-          navigation.navigate('PITScreen');
-        },
-      },
-    ]);
-  };
+  // const removePit = () => {
+  //   Alert.alert('Atenção', 'Tem certeza que deseja remover esta versão Pit?', [
+  //     {
+  //       text: 'Cancelar',
+  //     },
+  //     {
+  //       text: 'Sim',
+  //       onPress: () => {
+  //         removePIT(pitId);
+  //         navigation.navigate('PITScreen');
+  //       },
+  //     },
+  //   ]);
+  // };
 
   return (
     <>
-      {status === 'pending' && <Text h4>Loading...</Text>}
-      {status === 'success' && (
+      {axis && (
         <View style={styles.container}>
-          <Text style={styles.subtitle}>O seu regime é de {regime} horas</Text>
-          <View style={styles.InputContainer}>
-            <View style={styles.dateContainer}>
-              <Text style={styles.dateInputLabel}>Data de Início: </Text>
-
-              <MaskInput
-                value={date}
-                onChangeText={(masked, unmasked) => {
-                  setDate(masked); // you can use the unmasked value as well
-                }}
-                mask={Masks.DATE_DDMMYYYY}
-                style={styles.dateInput}
-                keyboardType="numeric"
-                // onBlur={Keyboard.dismiss()}
-              />
-            </View>
-
+          <View style={styles.container}>
+            <Text style={styles.subtitle}>
+              Defina as horas e atividades do seu Plano de Trabalho {year}
+            </Text>
             <View style={styles.InputContainer}>
               <Text style={styles.defaultFont}>
                 Horas distribuídas:{' '}
@@ -133,68 +131,56 @@ export default UpdatePIT = ({ navigation, route }) => {
                 </Text>
                 /{regime}
               </Text>
+              <View style={styles.dateContainer}>
+                <Text style={styles.dateInputLabel}>
+                  Início do plano: {moment.utc(date).format('DD/MM/YYYY')}
+                </Text>
+                <Button
+                  icon={<Icon name="calendar" size={15} color="white" />}
+                  title=""
+                  onPress={showPicker}
+                />
+                {show && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode="date"
+                    is24Hour={true}
+                    onChange={onChange}
+                    maximumDate={new Date(year, 11, 31)}
+                    minimumDate={new Date(year, 0, 1)}
+                  />
+                )}
+              </View>
             </View>
+            {axis.map((elem) => (
+              <View key={'v-' + elem.ref} style={styles.InputContainer}>
+                <Text key={'t-' + elem.ref} style={styles.defaultFont}>
+                  {elem.name}: {pit[`${elem.ref}`] ?? 0} Horas
+                </Text>
+                <Slider
+                  key={'s-' + elem.ref}
+                  value={pit[`${elem.ref}`]}
+                  maximumValue={elem.limit}
+                  minimumValue={0}
+                  step={1}
+                  onValueChange={(value) => {
+                    setPit((prevState) => ({
+                      ...prevState,
+                      [elem.ref]: value,
+                    }));
+                  }}
+                  thumbStyle={styles.thumbStyle}
+                />
+              </View>
+            ))}
           </View>
-
           <View style={styles.InputContainer}>
-            <Text style={styles.defaultFont}>Ensino (Aulas): {teaching}</Text>
-            <Slider
-              value={teaching}
-              maximumValue={16}
-              minimumValue={0}
-              step={1}
-              onValueChange={(value) => {
-                setTeaching(value);
-              }}
-              thumbStyle={styles.thumbStyle}
+            <Button
+              title="Enviar PIT"
+              //  onPress={submitPit}
             />
           </View>
-          <View style={styles.InputContainer}>
-            <Text style={styles.defaultFont}>Pesquisa: {researching}</Text>
-            <Slider
-              value={researching}
-              maximumValue={24}
-              minimumValue={0}
-              step={1}
-              onValueChange={(value) => {
-                setResearching(value);
-              }}
-              thumbStyle={styles.thumbStyle}
-            />
-          </View>
-          <View style={styles.InputContainer}>
-            <Text style={styles.defaultFont}>
-              Extensão/Inovação: {extension}
-            </Text>
-            <Slider
-              value={extension}
-              maximumValue={16}
-              minimumValue={0}
-              step={1}
-              onValueChange={(value) => {
-                setExtension(value);
-              }}
-              thumbStyle={styles.thumbStyle}
-            />
-          </View>
-          <View style={styles.InputContainer}>
-            <Text style={styles.defaultFont}>Gestão: {management}</Text>
-            <Slider
-              value={management}
-              maximumValue={40}
-              minimumValue={0}
-              step={1}
-              onValueChange={(value) => {
-                setManagement(value);
-              }}
-              thumbStyle={styles.thumbStyle}
-            />
-          </View>
-          <View style={styles.InputContainer}>
-            <Button title="Atualizar PIT" onPress={submitPit} />
-          </View>
-
-          <Button title="Remover PIT" color="#d00000" onPress={removePit} />
         </View>
       )}
     </>
@@ -204,17 +190,16 @@ export default UpdatePIT = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 0,
-    paddingHorizontal: 20,
+    backgroundColor: '#fff',
   },
-
   subtitle: {
-    fontSize: 24,
+    fontSize: 20,
     padding: 10,
-    marginBottom: 10,
   },
   InputContainer: {
     marginBottom: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
   },
   defaultFont: {
     fontSize: 18,
@@ -233,11 +218,11 @@ const styles = StyleSheet.create({
   },
   dateContainer: {
     flexDirection: 'row',
-    marginBottom: 10,
-    marginTop: 10,
+    marginTop: 20,
   },
   dateInputLabel: {
     fontSize: 18,
     alignSelf: 'center',
+    marginRight: 10,
   },
 });
