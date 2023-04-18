@@ -1,21 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, View, Button, Keyboard } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '../../providers/auth';
 import { useDataProvider } from '../../providers/app';
-import MaskInput, { Masks } from 'react-native-mask-input';
-import { Slider } from 'react-native-elements';
+import { Slider, Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { createPIT, handler } from '../../services/pit';
-import { formatDate } from '../../helper/formatDate';
-import { getLastDay } from '../../helper/getLastDay';
 import DropDownPicker from 'react-native-dropdown-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
 
-export default CreatePIT = ({ navigation }) => {
-  const { state, createUser } = useAuth();
+export default CreatePIT = ({ route, navigation }) => {
+  const { state } = useAuth();
   const { axis } = useDataProvider();
+  const { year } = route.params;
   const regime = state.user.regime;
   const [inputRegime, setInputRegime] = useState(0);
-  const [date, setDate] = useState('');
-  const [pit, setPit] = useState({});
+  const [pit, setPit] = useState(
+    axis.reduce((acc, eixo) => {
+      acc[eixo.ref] = 0;
+      return acc;
+    }, {}),
+  );
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
+  const showPicker = () => {
+    setShow(true);
+  };
   // const [open, setOpen] = useState(false);
   // const [value, setValue] = useState(null);
   // const [items, setItems] = useState([
@@ -28,27 +45,23 @@ export default CreatePIT = ({ navigation }) => {
   }, [pit]);
 
   const submitPit = () => {
-    if (date.length < 10) {
-      Alert.alert('Atenção', 'Insira a data de início!');
-      return;
-    }
-    if (inputRegime > regime) {
-      Alert.alert('Atenção', 'Número de horas excedido!');
-      return;
-    }
-    const dt_inicial = formatDate(date);
-    const dt_final = getLastDay(date);
     try {
-      createPIT({
-        dt_inicial: dt_inicial,
-        dt_final: dt_final,
-        teaching: teaching,
-        researching: researching,
-        extension: extension,
-        management: management,
-        vacation: false,
-        leave: false,
-      });
+      if (inputRegime > regime) {
+        Alert.alert('Atenção', 'Número de horas excedido!');
+        return;
+      }
+      if (inputRegime < regime) {
+        Alert.alert('Atenção', 'Número de horas insuficiente!');
+        return;
+      }
+      if (!date) {
+        Alert.alert('Atenção', 'Escolha uma data de início!');
+        return;
+      }
+      const dt_inicial = moment.utc(date).format('YYYY-MM-DD');
+      const dt_final = moment.utc(new Date(year, 11, 31)).format('YYYY-MM-DD');
+
+      createPIT({ ...pit, dt_inicial: dt_inicial, dt_final: dt_final });
       navigation.navigate('PITScreen');
     } catch (e) {
       throw handler(e);
@@ -61,7 +74,7 @@ export default CreatePIT = ({ navigation }) => {
         <View style={styles.container}>
           <View style={styles.container}>
             <Text style={styles.subtitle}>
-              Defina as horas e atividades do seu Plano de Trabalho
+              Defina as horas e atividades do seu Plano de Trabalho {year}
             </Text>
             <View style={styles.InputContainer}>
               <Text style={styles.defaultFont}>
@@ -78,25 +91,34 @@ export default CreatePIT = ({ navigation }) => {
                 /{regime}
               </Text>
               <View style={styles.dateContainer}>
-                <Text style={styles.dateInputLabel}>Data de Início: </Text>
-                <MaskInput
-                  value={date}
-                  onChangeText={(masked) => {
-                    setDate(masked); // you can use the unmasked value as well
-                  }}
-                  mask={Masks.DATE_DDMMYYYY}
-                  style={styles.dateInput}
-                  keyboardType="numeric"
-                  // onBlur={Keyboard.dismiss()}
+                <Text style={styles.dateInputLabel}>
+                  Início do plano: {moment.utc(date).format('DD/MM/YYYY')}
+                </Text>
+                <Button
+                  icon={<Icon name="calendar" size={15} color="white" />}
+                  title=""
+                  onPress={showPicker}
                 />
+                {show && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode="date"
+                    is24Hour={true}
+                    onChange={onChange}
+                    maximumDate={new Date(year, 11, 31)}
+                    minimumDate={new Date(year, 0, 1)}
+                  />
+                )}
               </View>
             </View>
             {axis.map((elem) => (
-              <View style={styles.InputContainer}>
-                <Text style={styles.defaultFont}>
+              <View key={'v-' + elem.ref} style={styles.InputContainer}>
+                <Text key={'t-' + elem.ref} style={styles.defaultFont}>
                   {elem.name}: {pit[`${elem.ref}`] ?? 0} Horas
                 </Text>
                 <Slider
+                  key={'s-' + elem.ref}
                   value={pit[`${elem.ref}`]}
                   maximumValue={elem.limit}
                   minimumValue={0}
@@ -157,5 +179,6 @@ const styles = StyleSheet.create({
   dateInputLabel: {
     fontSize: 18,
     alignSelf: 'center',
+    marginRight: 10,
   },
 });

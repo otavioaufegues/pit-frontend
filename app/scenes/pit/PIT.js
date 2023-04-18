@@ -89,7 +89,9 @@ export default function PIT({ route, navigation }) {
         >
           <Button
             title="Adicionar novo plano (PIT)"
-            onPress={() => navigation.navigate('CreatePITScreen')}
+            onPress={() =>
+              navigation.navigate('CreatePITScreen', { year: year })
+            }
           />
           <Button
             title="Estatísticas"
