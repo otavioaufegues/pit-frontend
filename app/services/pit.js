@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { PIT_URL, CREATE_PIT, YEAR_PIT } from '../constants';
+import { PIT_URL, CREATE_PIT, YEAR_PIT, BASE_URL } from '../constants';
 
 export async function listPIT(year) {
   try {
@@ -45,6 +45,14 @@ export async function removePIT(pitId) {
 export async function getYearPit(year) {
   try {
     return await axios.get(YEAR_PIT + '/' + year);
+  } catch (e) {
+    throw handler(e);
+  }
+}
+
+export async function getDropdownList() {
+  try {
+    return await axios.get(BASE_URL + 'category/pitDropdownList');
   } catch (e) {
     throw handler(e);
   }

@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '../../providers/auth';
 import { Slider, Button } from 'react-native-elements';
-import { getPIT, handler, removePIT, updatePIT } from '../../services/pit';
+import {
+  getDropdownList,
+  getPIT,
+  handler,
+  removePIT,
+  updatePIT,
+} from '../../services/pit';
 import Icon from 'react-native-vector-icons/FontAwesome';
-// import MaskInput, { Masks } from 'react-native-mask-input';
-// import { formatDate } from '../../helper/formatDate';
-// import { getLastDay } from '../../helper/getLastDay';
 import { useAsync } from '../../hooks/useAsync';
-// import { useIsFocused } from '@react-navigation/native';
 import moment from 'moment';
 import { useDataProvider } from '../../providers/app';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 export default UpdatePIT = ({ navigation, route }) => {
   const { state } = useAuth();
@@ -19,25 +22,19 @@ export default UpdatePIT = ({ navigation, route }) => {
   const { pitId, year } = route.params;
   const [regime, setRegime] = useState(state.user.regime);
   const [inputRegime, setInputRegime] = useState(0);
-  const [date, setDate] = useState();
   const [pit, setPit] = useState(
     axis.reduce((acc, eixo) => {
       acc[eixo.ref] = 0;
       return acc;
     }, {}),
   );
+
+  const [date, setDate] = useState();
   const [show, setShow] = useState(false);
 
-  // // const isFocused = useIsFocused();
-  // useEffect(() => {
-  //   if (isFocused) {
-  //     execute();
-  //   }
-  // }, [isFocused]);
-
-  const showPicker = () => {
-    setShow(true);
-  };
+  const [open, setOpen] = useState(false);
+  const [activities, setActivities] = useState([]);
+  const [items, setItems] = useState([]);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -45,7 +42,14 @@ export default UpdatePIT = ({ navigation, route }) => {
     setDate(currentDate);
   };
 
-  const { execute, response, status, error } = useAsync(() => getPIT(pitId));
+  const showPicker = () => {
+    setShow(true);
+  };
+
+  const { response, status } = useAsync(() => getPIT(pitId));
+
+  const { response: responseDropdownList, status: statusDropdownList } =
+    useAsync(() => getDropdownList());
 
   useEffect(() => {
     if (status === 'success') {
@@ -58,6 +62,7 @@ export default UpdatePIT = ({ navigation, route }) => {
         ),
       );
       setPit(extractedValues);
+      setActivities(response.data.pit.activities);
     }
   }, [status]);
 
@@ -66,70 +71,64 @@ export default UpdatePIT = ({ navigation, route }) => {
     setInputRegime(sumRegime);
   }, [pit]);
 
-  // const submitPit = () => {
-  //   if (date.length < 10) {
-  //     Alert.alert('Atenção', 'Insira a data de início!');
-  //     return;
-  //   }
+  useEffect(() => {
+    if (statusDropdownList === 'success') {
+      setItems(responseDropdownList.data);
+    }
+  }, [statusDropdownList]);
 
-  //   if (inputRegime > regime) {
-  //     Alert.alert('Atenção', 'Número de horas excedido!');
-  //     return;
-  //   }
+  const submitPit = () => {
+    try {
+      if (inputRegime > regime) {
+        Alert.alert('Atenção', 'Número de horas excedido!');
+        return;
+      }
+      if (inputRegime < regime) {
+        Alert.alert('Atenção', 'Número de horas insuficiente!');
+        return;
+      }
+      if (!date) {
+        Alert.alert('Atenção', 'Escolha uma data de início!');
+        return;
+      }
+      const dt_inicial = moment.utc(date).format('YYYY-MM-DD');
+      const dt_final = moment.utc(new Date(year, 11, 31)).format('YYYY-MM-DD');
 
-  //   const dt_inicial = formatDate(date);
-  //   try {
-  //     updatePIT(pitId, {
-  //       dt_inicial: dt_inicial,
-  //       teaching: teaching,
-  //       researching: researching,
-  //       extension: extension,
-  //       management: management,
-  //       leave: false,
-  //     });
+      updatePIT(pitId, {
+        ...pit,
+        dt_inicial: dt_inicial,
+        dt_final: dt_final,
+        activities: activities,
+      });
+      navigation.navigate('PITScreen');
+    } catch (e) {
+      throw handler(e);
+    }
+  };
 
-  //     navigation.navigate('PITScreen');
-  //   } catch (e) {
-  //     throw handler(e);
-  //   }
-  // };
-
-  // const removePit = () => {
-  //   Alert.alert('Atenção', 'Tem certeza que deseja remover esta versão Pit?', [
-  //     {
-  //       text: 'Cancelar',
-  //     },
-  //     {
-  //       text: 'Sim',
-  //       onPress: () => {
-  //         removePIT(pitId);
-  //         navigation.navigate('PITScreen');
-  //       },
-  //     },
-  //   ]);
-  // };
+  const remove = () => {
+    Alert.alert('Atenção', 'Tem certeza que deseja remover esta versão Pit?', [
+      {
+        text: 'Cancelar',
+      },
+      {
+        text: 'Sim',
+        onPress: () => {
+          removePIT(pitId);
+          navigation.navigate('PITScreen');
+        },
+      },
+    ]);
+  };
 
   return (
     <>
       {axis && (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
           <View style={styles.container}>
-            <Text style={styles.subtitle}>
-              Defina as horas e atividades do seu Plano de Trabalho {year}
-            </Text>
-            <View style={styles.InputContainer}>
-              <Text style={styles.defaultFont}>
-                Horas distribuídas:{' '}
-                <Text
-                  style={
-                    inputRegime > regime
-                      ? styles.limitColor
-                      : styles.defaultFont
-                  }
-                >
-                  {inputRegime}
-                </Text>
-                /{regime}
+            <View style={styles.section}>
+              <Text style={styles.subtitle}>
+                Defina a data de início do PIT {year}
               </Text>
               <View style={styles.dateContainer}>
                 <Text style={styles.dateInputLabel}>
@@ -153,35 +152,106 @@ export default UpdatePIT = ({ navigation, route }) => {
                 )}
               </View>
             </View>
-            {axis.map((elem) => (
-              <View key={'v-' + elem.ref} style={styles.InputContainer}>
-                <Text key={'t-' + elem.ref} style={styles.defaultFont}>
-                  {elem.name}: {pit[`${elem.ref}`] ?? 0} Horas
+            <View style={styles.section}>
+              <Text style={styles.subtitle}>
+                Defina a quantidade de horas do seu PIT {year}
+              </Text>
+              <View style={styles.InputContainer}>
+                <Text style={styles.defaultFont}>
+                  Horas distribuídas:{' '}
+                  <Text
+                    style={
+                      inputRegime > regime
+                        ? styles.limitColor
+                        : styles.defaultFont
+                    }
+                  >
+                    {inputRegime}
+                  </Text>
+                  /{regime}
                 </Text>
-                <Slider
-                  key={'s-' + elem.ref}
-                  value={pit[`${elem.ref}`]}
-                  maximumValue={elem.limit}
-                  minimumValue={0}
-                  step={1}
-                  onValueChange={(value) => {
-                    setPit((prevState) => ({
-                      ...prevState,
-                      [elem.ref]: value,
-                    }));
-                  }}
-                  thumbStyle={styles.thumbStyle}
-                />
               </View>
-            ))}
+              {axis.map((elem) => (
+                <View key={'v-' + elem.ref} style={styles.InputContainer}>
+                  <Text key={'t-' + elem.ref} style={styles.defaultFont}>
+                    {elem.name}: {pit[`${elem.ref}`] ?? 0} Horas
+                  </Text>
+                  <Slider
+                    key={'s-' + elem.ref}
+                    value={pit[`${elem.ref}`]}
+                    maximumValue={elem.limit}
+                    minimumValue={0}
+                    step={1}
+                    onValueChange={(value) => {
+                      setPit((prevState) => ({
+                        ...prevState,
+                        [elem.ref]: value,
+                      }));
+                    }}
+                    thumbStyle={styles.thumbStyle}
+                  />
+                </View>
+              ))}
+            </View>
+            <View style={styles.section}>
+              {statusDropdownList === 'success' && (
+                <View>
+                  <Text style={styles.subtitle}>
+                    Defina as atividades do seu PIT {year}
+                  </Text>
+                  <DropDownPicker
+                    searchable={true}
+                    loading={status === 'idle'}
+                    open={open}
+                    value={activities}
+                    items={items}
+                    setOpen={setOpen}
+                    setValue={setActivities}
+                    setItems={setItems}
+                    listMode="MODAL"
+                    mode="SIMPLE"
+                    multiple={true}
+                    style={styles.dropDownPicker}
+                    translation={{
+                      PLACEHOLDER: 'Selecione as atividades do PIT',
+                      SEARCH_PLACEHOLDER: 'Buscar atividade...',
+                      SELECTED_ITEMS_COUNT_TEXT: {
+                        1: '1 atividade selecionada',
+                        n: '{count} atividades selecionadas',
+                      },
+                      NOTHING_TO_SHOW: 'Nenhuma atividade para mostrar',
+                    }}
+                    listParentLabelStyle={{
+                      fontWeight: 'bold',
+                    }}
+                    listChildContainerStyle={{
+                      paddingLeft: 5,
+                      padding: 5,
+                      borderBottomWidth: 1,
+                      borderBottomColor: '#ddd',
+                      height: 'auto',
+                      minHeight: 40,
+                    }}
+                    selectedItemContainerStyle={{
+                      backgroundColor: '#d48888',
+                    }}
+                  />
+                </View>
+              )}
+            </View>
           </View>
           <View style={styles.InputContainer}>
+            <Button title="Atualizar PIT" onPress={submitPit} />
             <Button
-              title="Enviar PIT"
-              //  onPress={submitPit}
+              title="Excluir PIT"
+              onPress={remove}
+              buttonStyle={{ backgroundColor: '#d00000' }}
+              containerStyle={{
+                marginVertical: 10,
+              }}
             />
           </View>
-        </View>
+        </ScrollView>
       )}
     </>
   );
@@ -190,15 +260,22 @@ export default UpdatePIT = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 5,
+    marginBottom: 10,
+  },
+  section: {
     backgroundColor: '#fff',
+    padding: 5,
+    borderRadius: 5,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    marginBottom: 8,
   },
   subtitle: {
     fontSize: 20,
-    padding: 10,
+    marginBottom: 5,
   },
   InputContainer: {
-    marginBottom: 10,
-    paddingHorizontal: 15,
     paddingVertical: 5,
   },
   defaultFont: {
@@ -217,12 +294,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   dateContainer: {
+    marginBottom: 10,
     flexDirection: 'row',
-    marginTop: 20,
   },
   dateInputLabel: {
     fontSize: 18,
     alignSelf: 'center',
     marginRight: 10,
+  },
+  dropDownPicker: {
+    marginBottom: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
   },
 });

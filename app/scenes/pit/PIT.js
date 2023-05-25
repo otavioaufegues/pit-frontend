@@ -39,6 +39,7 @@ export default function PIT({ route, navigation }) {
       onPress={() => {
         navigation.navigate('UpdatePITScreen', {
           pitId: item._id,
+          year: year,
         });
       }}
     >
