@@ -50,6 +50,30 @@ export async function getYearPit(year) {
   }
 }
 
+export async function getComparePit(year) {
+  try {
+    return await axios.get(BASE_URL + 'pit/compare/' + (year - 1) + '/' + year);
+  } catch (e) {
+    throw handler(e);
+  }
+}
+
+export async function getCompareDepartment(year) {
+  try {
+    return await axios.get(BASE_URL + 'pit/compare/department/' + year);
+  } catch (e) {
+    throw handler(e);
+  }
+}
+
+export async function getPitDepartment(year) {
+  try {
+    return await axios.get(BASE_URL + 'pit/department/' + year);
+  } catch (e) {
+    throw handler(e);
+  }
+}
+
 export async function getDropdownList() {
   try {
     return await axios.get(BASE_URL + 'category/pitDropdownList');

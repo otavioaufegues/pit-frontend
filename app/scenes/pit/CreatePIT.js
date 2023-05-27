@@ -76,6 +76,7 @@ export default CreatePIT = ({ route, navigation }) => {
         dt_inicial: dt_inicial,
         dt_final: dt_final,
         activities: activities,
+        year: year,
       });
       navigation.navigate('PITScreen');
     } catch (e) {

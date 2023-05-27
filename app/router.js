@@ -20,7 +20,10 @@ import UpdateProfileScreen from './scenes/home/UpdateProfile';
 import PITScreen from './scenes/pit/PIT';
 import UpdatePITScreen from './scenes/pit/UpdatePIT';
 import CreatePITScreen from './scenes/pit/CreatePIT';
-import PitChartsScreen from './scenes/pit/pitCharts';
+import pitChartsScreen from './scenes/pit/pitCharts';
+import comparePitAnual from './scenes/pit/reports/comparePitAnual';
+import comparePitDepartment from './scenes/pit/reports/comparePitDepartment';
+import reportPitDepartment from './scenes/pit/reports/reportPitDepartment';
 
 //IMPORT RIT SCENES
 import RITScreen from './scenes/rit/RIT';
@@ -74,8 +77,7 @@ export default function Router() {
               },
               headerTintColor: '#fff',
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontSize: 15,
+                fontSize: 20,
               },
             }}
           >
@@ -86,12 +88,15 @@ export default function Router() {
               component={RegisterScreen}
               options={{ title: 'Cadastro de Usuário' }}
             />
+
             <Stack.Screen
               name="LoginScreen"
               component={LoginScreen}
               options={{ headerShown: false }}
             />
+
             <Stack.Screen name="UsernameScreen" component={UsernameScreen} />
+
             <Stack.Screen
               name="ForgotPasswordScreen"
               component={ForgotPasswordScreen}
@@ -105,7 +110,6 @@ export default function Router() {
                 title: 'UFJF',
                 headerTitle: (props) => (
                   <View style={formsStyles.headerTitle}>
-                    {/* <LogoTitle {...props} /> */}
                     <Text style={formsStyles.colorWhite}>
                       Universidade Federal de Juiz de Fora
                     </Text>
@@ -125,20 +129,41 @@ export default function Router() {
               component={PITScreen}
               options={{ title: 'Plano individual de trabalho' }}
             />
+
             <Stack.Screen
               name="UpdatePITScreen"
               component={UpdatePITScreen}
               options={{ title: 'Editar plano de trabalho' }}
             />
+
             <Stack.Screen
               name="CreatePITScreen"
               component={CreatePITScreen}
               options={{ title: 'Cadastro de PIT' }}
             />
+
             <Stack.Screen
               name="pitChartsScreen"
-              component={PitChartsScreen}
-              options={{ title: 'Gráficos' }}
+              component={pitChartsScreen}
+              options={{ title: 'Estatísticas' }}
+            />
+
+            <Stack.Screen
+              name="comparePitAnual"
+              component={comparePitAnual}
+              options={{ title: '' }}
+            />
+
+            <Stack.Screen
+              name="comparePitDepartment"
+              component={comparePitDepartment}
+              options={{ title: '' }}
+            />
+
+            <Stack.Screen
+              name="reportPitDepartment"
+              component={reportPitDepartment}
+              options={{ title: '' }}
             />
 
             <Stack.Screen
@@ -171,6 +196,7 @@ export default function Router() {
               component={ActivityFormScreen}
               options={{ title: 'Atividade' }}
             />
+
             <Stack.Screen
               name="ReportRitScreen"
               component={ReportRitScreen}
@@ -178,6 +204,7 @@ export default function Router() {
                 title: `Relatório - ${route.params.year}`,
               })}
             />
+
             <Stack.Screen
               name="ReportDepartmentScreen"
               component={ReportDepartmentScreen}
@@ -185,6 +212,7 @@ export default function Router() {
                 title: `Relatório - ${route.params.year}`,
               })}
             />
+
             <Stack.Screen
               name="ReportInstitutionScreen"
               component={ReportInstitutionScreen}
@@ -192,6 +220,7 @@ export default function Router() {
                 title: `Relatório - ${route.params.year}`,
               })}
             />
+
             <Stack.Screen
               name="ReportUserScreen"
               component={ReportUserScreen}
@@ -199,6 +228,7 @@ export default function Router() {
                 title: `Relatório - ${route.params.year}`,
               })}
             />
+
             <Stack.Screen
               name="ReportEvolutionScreen"
               component={ReportEvolutionScreen}
@@ -227,6 +257,7 @@ export default function Router() {
                 },
               })}
             />
+
             <Stack.Screen
               name="InstitutionScreen"
               component={InstitutionScreen}

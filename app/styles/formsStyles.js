@@ -1,4 +1,4 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -82,8 +82,7 @@ export default StyleSheet.create({
 
   colorWhite: {
     color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: 18,
     justifyContent: 'center',
   },
 
