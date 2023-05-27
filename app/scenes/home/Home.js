@@ -110,7 +110,7 @@ export default function Home({ route, navigation }) {
 
       <Card>
         {years.map((item) => (
-          <ListItem bottomDivider key={`itm${item._id}`}>
+          <ListItem bottomDivider key={`itm${item.year}`}>
             <View style={styles.view}>
               <Icon name="event-available" size={21} />
               <Text style={styles.text}>{item.year}</Text>
