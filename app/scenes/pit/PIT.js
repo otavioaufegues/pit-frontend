@@ -9,8 +9,7 @@ import * as api from '../../services/pit';
 export default function PIT({ route, navigation }) {
   const isFocused = useIsFocused();
   const { year } = route.params;
-  const { state, handleLogout } = useAuth();
-  const user = state.user;
+  const { state } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [pit, setPIT] = useState({
@@ -52,10 +51,6 @@ export default function PIT({ route, navigation }) {
       <ListItem.Chevron />
     </ListItem>
   );
-  const data = {
-    labels: ['Swim', 'Bike'], // optional
-    data: [0.1111, 0.4344],
-  };
 
   return (
     <SafeAreaView
