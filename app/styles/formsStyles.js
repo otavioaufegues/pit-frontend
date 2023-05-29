@@ -5,8 +5,8 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 export default StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 16,
+    padding: 15,
+    // paddingBottom: 30,
     backgroundColor: '#fff',
   },
   view: {
@@ -37,7 +37,11 @@ export default StyleSheet.create({
   },
 
   formInput: {
+    borderColor: '#ddd',
+    borderWidth: 1,
     marginVertical: 15,
+    textAlignVertical: 'top',
+    padding: 5,
   },
 
   marginBottom: {
@@ -47,10 +51,6 @@ export default StyleSheet.create({
   errorMessages: {
     color: 'red',
     fontWeight: 'bold',
-  },
-
-  table: {
-    marginTop: 15,
   },
 
   actionsButtons: {

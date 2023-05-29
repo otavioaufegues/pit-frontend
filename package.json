@@ -30,7 +30,7 @@
     "react-native-dotenv": "^2.5.5",
     "react-native-dropdown-picker": "^5.4.4",
     "react-native-editable-list": "^1.0.3",
-    "react-native-editable-table": "^1.0.0",
+    "react-native-editable-table": "leoslf/react-native-editable-table",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~2.8.0",
     "react-native-mask-input": "^1.2.2",

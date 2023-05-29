@@ -1,26 +1,25 @@
-import React, {useState, useEffect} from 'react';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {ListItem, Icon} from 'react-native-elements';
-import {ScrollView} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ListItem, Icon } from 'react-native-elements';
+import { ScrollView } from 'react-native';
 import ActivityListItem from './listItens/ActivityListItem';
 import Loading from './Loading';
-import {useAuth} from '../../providers/auth';
+import { useAuth } from '../../providers/auth';
 
 import styles from '../../styles/styles';
 import * as api from '../../services/rit';
 
-export default function RIT({route, navigation}) {
-  const {year, yearId} = route.params;
+export default function RIT({ route, navigation }) {
+  const { year, yearId } = route.params;
   const [collapsed, setCollapsed] = useState(new Set());
   const [loading, setLoading] = useState(false);
   const [activitiesByCategory, setActivitiesByCategory] = useState([]);
-  const {getAuthState} = useAuth();
+  const { getAuthState } = useAuth();
 
-  const getActivities = async year => {
+  const getActivities = async (year) => {
     try {
-      const {data} = await api.getActivitiesService(year);
+      const { data } = await api.getActivitiesService(year);
       setActivitiesByCategory(data.activitiesByCategory);
-      console.log(data);
       setLoading(false);
     } catch (e) {
       console.log(e);
@@ -47,11 +46,11 @@ export default function RIT({route, navigation}) {
     setActivitiesByCategory(arr);
     setLoading(true);
 
-    const {user} = await getAuthState();
+    const { user } = await getAuthState();
     deleteActivity(item._id, user._id, arr);
   };
 
-  const updateItem = item => {
+  const updateItem = (item) => {
     navigation.navigate('ActivityFormScreen', {
       activityId: item._id,
       description: item.description,
@@ -60,7 +59,7 @@ export default function RIT({route, navigation}) {
     });
   };
 
-  const createItem = item => {
+  const createItem = (item) => {
     navigation.navigate('ActivityFormScreen', {
       categoryId: item._id,
       categoryDetails: item.details,
@@ -71,7 +70,13 @@ export default function RIT({route, navigation}) {
   };
 
   const renderItem = (item, index) => (
-    <ActivityListItem key={item._id} item={item} navigation={navigation} handleDelete={() => deleteItem(item, index)} handleShow={() => updateItem(item)} />
+    <ActivityListItem
+      key={item._id}
+      item={item}
+      navigation={navigation}
+      handleDelete={() => deleteItem(item, index)}
+      handleShow={() => updateItem(item)}
+    />
   );
 
   const renderCategory = (item, index) => (
@@ -81,7 +86,7 @@ export default function RIT({route, navigation}) {
       content={
         <>
           <Icon
-          color="#b22d30"
+            color="#b22d30"
             name={`${item.axisIcon}`}
             size={21}
             onPress={() => {
@@ -96,22 +101,30 @@ export default function RIT({route, navigation}) {
           />
 
           <ListItem.Content>
-            <ListItem.Title style={styles.categoryDescription}>{item.description}</ListItem.Title>
+            <ListItem.Title style={styles.categoryDescription}>
+              {item.description}
+            </ListItem.Title>
           </ListItem.Content>
-          <Icon color="#b22d30" name="add-circle" size={21} onPress={() => createItem(item)} />
+          <Icon
+            color="#b22d30"
+            name="add-circle"
+            size={21}
+            onPress={() => createItem(item)}
+          />
         </>
-      }>
+      }
+    >
       {item.activities.map(renderItem)}
       {/* {item.activities.details.map()} */}
       {/* <Text>{item.activities.details.map(renderItem)}</Text> */}
-
     </ListItem.Accordion>
   );
 
   return (
     <SafeAreaProvider>
-      <ScrollView style={styles.container}>{loading ? <Loading /> : activitiesByCategory.map(renderCategory)}</ScrollView>
+      <ScrollView style={styles.container}>
+        {loading ? <Loading /> : activitiesByCategory.map(renderCategory)}
+      </ScrollView>
     </SafeAreaProvider>
   );
 }
-
