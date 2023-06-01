@@ -149,13 +149,17 @@ export default function ActivityForm({ route, navigation }) {
     );
   };
 
-  const tableData = [
+  const tableColumns = ['Campo', 'Valor'];
+
+  const [tableData, setTableData] = useState([
     ['John', 'Doe'],
     ['Jane', 'Smith'],
     ['Bob', 'Johnson'],
-  ];
+  ]);
 
-  const tableColumns = ['Campo', 'Valor'];
+  const handleTableDataChange = (newTableData) => {
+    setTableData(newTableData);
+  };
 
   return (
     <ScrollView style={formsStyles.container}>
@@ -170,52 +174,33 @@ export default function ActivityForm({ route, navigation }) {
       {errors.description && errors.description.type === 'required' && (
         <Text style={formsStyles.errorMessages}>Campo obrigatório</Text>
       )}
-
-      {dataCategory == undefined ? (
-        <Text></Text>
-      ) : (
-        <EditableTable data={dataCategory} columns={tableColumns} />
+      {(dataCategory != undefined) ?? (
+        <EditableTable
+          data={tableData}
+          columns={tableColumns}
+          onTableDataChange={handleTableDataChange}
+        />
       )}
-      {data == undefined ? (
-        <Text></Text>
-      ) : (
-        <EditableTable data={data} columns={tableColumns} />
+      {(data != undefined) ?? (
+        <EditableTable
+          data={tableData}
+          columns={tableColumns}
+          onTableDataChange={handleTableDataChange}
+        />
       )}
+      {/* <View style={formsStyles.actionsButtons}>
+        <Button
+          color="#b22d30"
+          onPress={handleSubmit(onSubmit)}
+          title={'Salvar'}
+        />
+        <View style={formsStyles.space}></View>
+        <Button
+          color="#bdbfc1"
+          onPress={handleSubmit(onCancel)}
+          title={'Cancelar'}
+        />
+      </View> */}
     </ScrollView>
   );
-
-
-
-  //           onCellChange={(value, column, row, unique_id) => {
-  //             dataCategory[row][column].value = value;
-  //             if (
-  //               dataCategory[row][0].value.length === 0 &&
-  //               dataCategory[row][1].value.length === 0
-  //             ) {
-  //               let arr = [...dataCategory];
-  //               const a = arr.splice(arr.indexOf(row), 1);
-  //               setData(arr);
-  //             }
-  //           }}
-  //           onColumnChange={(value, oldVal, newVal) => {}}
-  //         onCellChange={(value, column, row, unique_id) => {
-  //           data[row][column].value = value;
-  //           if (
-  //             data[row][0].value.length === 0 &&
-  //             data[row][1].value.length === 0
-  //           ) {
-  //             data.splice(row, 1);
-  //           }
-  //         }}
-  //     <Button
-  //       onPress={handleSubmit(onSubmit)}
-  //       title={'Salvar'}
-  //     />
-  //     <Button
-  //       onPress={handleSubmit(onCancel)}
-  //       title={'Cancelar'}
-  //     />
-  //   </View>
-  // </View>
-  // );
 }

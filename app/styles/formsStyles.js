@@ -56,7 +56,6 @@ export default StyleSheet.create({
   actionsButtons: {
     width: '100%',
     alignSelf: 'center',
-    position: 'absolute', //Here is the trick
     bottom: 15, //Here is the trick
     paddingLeft: 16,
     paddingRight: 16,

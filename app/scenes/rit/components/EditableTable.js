@@ -7,18 +7,17 @@ import {
   StyleSheet,
 } from 'react-native';
 
-const EditableTable = ({ data, columns }) => {
-  const [tableData, setTableData] = useState(data);
-
+const EditableTable = ({ data, columns, onTableDataChange }) => {
   const handleCellChange = (rowIndex, columnIndex, value) => {
     const updatedTableData = [...tableData];
     updatedTableData[rowIndex][columnIndex] = value;
-    setTableData(updatedTableData);
+    onTableDataChange(updatedTableData);
   };
 
   const handleAddRow = () => {
     const newRow = Array(columns.length).fill('');
-    setTableData([...tableData, newRow]);
+    const updatedTableData = [...tableData, newRow];
+    onTableDataChange(updatedTableData);
   };
 
   return (
