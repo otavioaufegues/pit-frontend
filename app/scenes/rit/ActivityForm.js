@@ -72,12 +72,10 @@ export default function ActivityForm({ route, navigation }) {
 
   const updateDetailsActivity = async (activityId, data) => {
     try {
-      const newData = data.map(function (val) {
-        return {
-          key: val[0].value,
-          value: val[1].value,
-        };
-      });
+      const newData = data.reduce((obj, [key, value]) => {
+        obj[key] = value;
+        return obj;
+      }, {});
       await api.updateDetailsActivityService(activityId, newData);
     } catch (e) {
       console.log(e);
@@ -126,6 +124,10 @@ export default function ActivityForm({ route, navigation }) {
       setDataCategory(Object.entries(categoryDetails).map((v) => [v[0], v[1]]));
   }, []);
 
+  useEffect(() => {
+    console.log('mudou', data, dataCategory);
+  }, [data, dataCategory]);
+
   const TextField = ({ label, name, control, placeholder }) => {
     const { field } = useController({
       control,
@@ -151,16 +153,6 @@ export default function ActivityForm({ route, navigation }) {
 
   const tableColumns = ['Campo', 'Valor'];
 
-  const [tableData, setTableData] = useState([
-    ['John', 'Doe'],
-    ['Jane', 'Smith'],
-    ['Bob', 'Johnson'],
-  ]);
-
-  const handleTableDataChange = (newTableData) => {
-    setTableData(newTableData);
-  };
-
   return (
     <ScrollView style={formsStyles.container}>
       <TextField
@@ -174,21 +166,21 @@ export default function ActivityForm({ route, navigation }) {
       {errors.description && errors.description.type === 'required' && (
         <Text style={formsStyles.errorMessages}>Campo obrigatório</Text>
       )}
-      {(dataCategory != undefined) ?? (
+      {dataCategory && (
         <EditableTable
-          data={tableData}
+          data={dataCategory}
           columns={tableColumns}
-          onTableDataChange={handleTableDataChange}
+          onTableDataChange={setDataCategory}
         />
       )}
-      {(data != undefined) ?? (
+      {data && (
         <EditableTable
-          data={tableData}
+          data={data}
           columns={tableColumns}
-          onTableDataChange={handleTableDataChange}
+          onTableDataChange={setData}
         />
       )}
-      {/* <View style={formsStyles.actionsButtons}>
+      <View style={formsStyles.actionsButtons}>
         <Button
           color="#b22d30"
           onPress={handleSubmit(onSubmit)}
@@ -200,7 +192,41 @@ export default function ActivityForm({ route, navigation }) {
           onPress={handleSubmit(onCancel)}
           title={'Cancelar'}
         />
-      </View> */}
+      </View>
     </ScrollView>
   );
+
+  //           onCellChange={(value, column, row, unique_id) => {
+  //             dataCategory[row][column].value = value;
+  //             if (
+  //               dataCategory[row][0].value.length === 0 &&
+  //               dataCategory[row][1].value.length === 0
+  //             ) {
+  //               let arr = [...dataCategory];
+  //               const a = arr.splice(arr.indexOf(row), 1);
+  //               setData(arr);
+  //             }
+  //           }}
+  //           onColumnChange={(value, oldVal, newVal) => {}}
+  //         onCellChange={(value, column, row, unique_id) => {
+  //           data[row][column].value = value;
+  //           if (
+  //             data[row][0].value.length === 0 &&
+  //             data[row][1].value.length === 0
+  //           ) {
+  //             data.splice(row, 1);
+  //           }
+  //         }}
+  //     <Button
+  //       onPress={handleSubmit(onSubmit)}
+  //       title={'Salvar'}
+  //     />
+  //     <Button
+  //       onPress={handleSubmit(onCancel)}
+  //       title={'Cancelar'}
+  //     />
+
+  //   </View>
+  // </View>
+  // );
 }

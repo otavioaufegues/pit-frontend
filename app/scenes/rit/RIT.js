@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ListItem, Icon } from 'react-native-elements';
-import { ScrollView } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native';
 import ActivityListItem from './listItens/ActivityListItem';
 import Loading from './Loading';
 import { useAuth } from '../../providers/auth';
@@ -84,21 +84,19 @@ export default function RIT({ route, navigation }) {
       key={`acc${index}`}
       isExpanded={!collapsed.has(index)}
       content={
-        <>
-          <Icon
-            color="#b22d30"
-            name={`${item.axisIcon}`}
-            size={21}
-            onPress={() => {
-              if (collapsed.has(index)) {
-                collapsed.delete(index);
-                setCollapsed(new Set(collapsed));
-              } else {
-                collapsed.add(index);
-                setCollapsed(new Set(collapsed));
-              }
-            }}
-          />
+        <TouchableOpacity
+          style={{ flexDirection: 'row', alignItems: 'center' }}
+          onPress={() => {
+            if (collapsed.has(index)) {
+              collapsed.delete(index);
+              setCollapsed(new Set(collapsed));
+            } else {
+              collapsed.add(index);
+              setCollapsed(new Set(collapsed));
+            }
+          }}
+        >
+          <Icon color="#b22d30" name={`${item.axisIcon}`} size={21} />
 
           <ListItem.Content>
             <ListItem.Title style={styles.categoryDescription}>
@@ -111,12 +109,10 @@ export default function RIT({ route, navigation }) {
             size={21}
             onPress={() => createItem(item)}
           />
-        </>
+        </TouchableOpacity>
       }
     >
       {item.activities.map(renderItem)}
-      {/* {item.activities.details.map()} */}
-      {/* <Text>{item.activities.details.map(renderItem)}</Text> */}
     </ListItem.Accordion>
   );
 

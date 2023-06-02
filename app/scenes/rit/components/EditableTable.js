@@ -9,14 +9,14 @@ import {
 
 const EditableTable = ({ data, columns, onTableDataChange }) => {
   const handleCellChange = (rowIndex, columnIndex, value) => {
-    const updatedTableData = [...tableData];
+    const updatedTableData = [...data];
     updatedTableData[rowIndex][columnIndex] = value;
     onTableDataChange(updatedTableData);
   };
 
   const handleAddRow = () => {
     const newRow = Array(columns.length).fill('');
-    const updatedTableData = [...tableData, newRow];
+    const updatedTableData = [...data, newRow];
     onTableDataChange(updatedTableData);
   };
 
@@ -33,7 +33,7 @@ const EditableTable = ({ data, columns, onTableDataChange }) => {
         ))}
       </View>
       <View style={styles.tableBody}>
-        {tableData.map((rowData, rowIndex) => (
+        {data.map((rowData, rowIndex) => (
           <View key={rowIndex} style={styles.tableRow}>
             {rowData.map((cellData, columnIndex) => (
               <TextInput
