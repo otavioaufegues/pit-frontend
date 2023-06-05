@@ -11,6 +11,11 @@ export default StyleSheet.create({
     fontSize: 16,
   },
 
+  subtitle: {
+    fontSize: 20,
+    marginBottom: 5,
+  },
+
   view: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -70,14 +75,28 @@ export default StyleSheet.create({
     flexDirection: 'row',
   },
 
-  buttonPitRit: {
-    paddingHorizontal: 5,
+  buttonHome: {
+    backgroundColor: '#fff',
+    borderColor: '#222',
+    color: '#222',
+    height: 60,
+    borderWidth: 1,
+    borderRadius: 5,
   },
 
-  buttonIconText: {
+  buttonHomeTitle: { fontWeight: '400', color: '#222' },
+
+  buttonHomeContainer: {
+    width: '48%',
+    marginBottom: 10,
+  },
+
+  buttonHomeView: {
     flexDirection: 'row',
-    display: 'flex',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    width: '100%',
   },
 
   // year list
@@ -106,5 +125,10 @@ export default StyleSheet.create({
   addRowButtonText: {
     fontSize: 18,
     color: '#fff',
+  },
+
+  dropDownPicker: {
+    paddingHorizontal: 15,
+    paddingVertical: 5,
   },
 });

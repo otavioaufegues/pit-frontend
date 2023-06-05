@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
   },
   defaultFont: {
     fontSize: 18,
-    color: '#000',
+    color: '#222',
   },
   limitColor: {
     color: '#d00000',

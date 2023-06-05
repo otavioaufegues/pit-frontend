@@ -6,12 +6,17 @@ import { useAuth } from '../../providers/auth';
 import { updateProfile } from '../../services/auth';
 import * as api from '../../services/rit';
 import styles from '../../styles/styles';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function Home({ route, navigation }) {
   const { state, handleLogout } = useAuth();
   const [loading, setLoading] = useState(false);
   const [years, setYears] = useState([]);
+  const [year, setYear] = useState();
+  const [yearValue, setYearValue] = useState();
   const [departmentData, setDepartmentData] = useState();
+  const [open, setOpen] = useState(false);
+  const [items, setItems] = useState([]);
 
   const user = state.user;
 
@@ -41,6 +46,22 @@ export default function Home({ route, navigation }) {
     getDepartment();
   }, [route]);
 
+  useEffect(() => {
+    if (years.length > 0) {
+      const yearDropdown = years.map((year) => {
+        return {
+          value: year._id,
+          label: year.year,
+        };
+      });
+      setItems(yearDropdown);
+
+      const currentYear = new Date().getFullYear();
+      const currentYearObject = years.find((obj) => obj.year === currentYear);
+      if (currentYearObject) setYear(currentYearObject._id);
+    }
+  }, [years]);
+
   const rit = (yearId, year) => {
     navigation.navigate('RITScreen', { yearId: yearId, year: year });
   };
@@ -66,7 +87,7 @@ export default function Home({ route, navigation }) {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <Card>
         <View style={styles.viewCard}>
           <View style={styles.viewFirstColumn}>
@@ -97,52 +118,171 @@ export default function Home({ route, navigation }) {
       </Card>
 
       <Card>
-        <View style={styles.viewSecondColumn}>
-          <Button title="UFJF" type="outline" onPress={() => institution()} />
-          <Button title="Evolução" type="outline" onPress={() => evolution()} />
+        <Text style={styles.subtitle}>Escolha o ano das atividades</Text>
+        <DropDownPicker
+          loading={loading}
+          open={open}
+          value={year}
+          items={items}
+          setOpen={setOpen}
+          setValue={setYear}
+          setItems={setItems}
+          listMode="MODAL"
+          mode="SIMPLE"
+          style={styles.dropDownPicker}
+          translation={{
+            PLACEHOLDER: 'Selecione',
+            SEARCH_PLACEHOLDER: 'Buscar Anos...',
+            SELECTED_ITEMS_COUNT_TEXT: {
+              1: '1 ano selecionado',
+              n: '{count} anos selecionados',
+            },
+            NOTHING_TO_SHOW: 'Nenhuma ano para mostrar',
+          }}
+          listParentLabelStyle={{
+            fontWeight: 'bold',
+          }}
+          listChildContainerStyle={{
+            paddingLeft: 5,
+            padding: 5,
+            borderBottomWidth: 1,
+            borderBottomColor: '#ddd',
+            height: 'auto',
+            minHeight: 40,
+          }}
+          selectedItemContainerStyle={{
+            backgroundColor: '#bcbcc3',
+            color: '#fff',
+          }}
+          onChangeValue={(value) => {
+            setYearValue(years.find((obj) => obj._id === value));
+          }}
+        />
+      </Card>
+
+      <Card>
+        <View style={styles.buttonHomeView}>
+          <Button
+            title="PIT"
+            icon={{
+              name: 'tasks',
+              type: 'font-awesome',
+              size: 20,
+              color: '#222',
+            }}
+            iconRight
+            iconContainerStyle={{ marginLeft: 10 }}
+            titleStyle={styles.buttonHomeTitle}
+            buttonStyle={styles.buttonHome}
+            containerStyle={styles.buttonHomeContainer}
+            onPress={() => project(yearValue)}
+          />
+          <Button
+            title="RIT"
+            icon={{
+              name: 'list-ul',
+              type: 'font-awesome',
+              size: 20,
+              color: '#222',
+            }}
+            iconRight
+            iconContainerStyle={{
+              marginLeft: 10,
+            }}
+            titleStyle={styles.buttonHomeTitle}
+            buttonStyle={styles.buttonHome}
+            containerStyle={styles.buttonHomeContainer}
+            onPress={() => rit(yearValue._id, yearValue.year)}
+          />
+          <Button
+            title="Resultado"
+            icon={{
+              name: 'bar-chart',
+              type: 'font-awesome',
+              size: 20,
+              color: '#222',
+            }}
+            iconRight
+            iconContainerStyle={{ marginLeft: 5 }}
+            titleStyle={styles.buttonHomeTitle}
+            buttonStyle={styles.buttonHome}
+            containerStyle={styles.buttonHomeContainer}
+          />
+          <Button
+            title="Comentários"
+            icon={{
+              name: 'comments-o',
+              type: 'font-awesome',
+              size: 20,
+              color: '#222',
+            }}
+            iconRight
+            iconContainerStyle={{ marginLeft: 5 }}
+            titleStyle={styles.buttonHomeTitle}
+            buttonStyle={styles.buttonHome}
+            containerStyle={styles.buttonHomeContainer}
+          />
+          <Button
+            title="Professores"
+            icon={{
+              name: 'users',
+              type: 'font-awesome',
+              size: 20,
+              color: '#222',
+            }}
+            iconRight
+            iconContainerStyle={{ marginLeft: 5 }}
+            titleStyle={styles.buttonHomeTitle}
+            buttonStyle={styles.buttonHome}
+            containerStyle={styles.buttonHomeContainer}
+          />
+          <Button
+            title="UFJF"
+            icon={{
+              name: 'university',
+              type: 'font-awesome',
+              size: 20,
+              color: '#222',
+            }}
+            iconRight
+            iconContainerStyle={{ marginLeft: 10 }}
+            titleStyle={styles.buttonHomeTitle}
+            buttonStyle={styles.buttonHome}
+            containerStyle={styles.buttonHomeContainer}
+            onPress={() => institution()}
+          />
+          <Button
+            title="Evolução"
+            icon={{
+              name: 'line-chart',
+              type: 'font-awesome',
+              size: 20,
+              color: '#222',
+            }}
+            iconRight
+            iconContainerStyle={{ marginLeft: 5 }}
+            titleStyle={styles.buttonHomeTitle}
+            buttonStyle={styles.buttonHome}
+            containerStyle={styles.buttonHomeContainer}
+            onPress={() => evolution()}
+          />
           <Button
             title="Importar"
-            type="outline"
+            icon={{
+              name: 'download',
+              type: 'font-awesome',
+              size: 20,
+              color: '#222',
+            }}
+            iconRight
+            iconContainerStyle={{ marginLeft: 5 }}
+            titleStyle={styles.buttonHomeTitle}
+            buttonStyle={styles.buttonHome}
+            containerStyle={styles.buttonHomeContainer}
             onPress={() => importData()}
           />
         </View>
       </Card>
-
-      <Card>
-        {years.map((item) => (
-          <ListItem bottomDivider key={`itm${item.year}`}>
-            <View style={styles.view}>
-              <Icon name="event-available" size={21} />
-              <Text style={styles.text}>{item.year}</Text>
-              <View style={styles.viewListItem}>
-                <View style={styles.buttonPitRit}>
-                  <Button
-                    buttonStyle={{ backgroundColor: '#d48888' }}
-                    onPress={() => project(item.year)}
-                    title={'PIT'}
-                  />
-                </View>
-                <View style={styles.buttonPitRit}>
-                  <Button
-                    buttonStyle={{ backgroundColor: '#876c6f' }}
-                    onPress={() => rit(item._id, item.year)}
-                    title={'RIT'}
-                  />
-                </View>
-                {/* 
-                <Icon name="trending-up" size={21} onPress={() => project(item.year)} />
-                <Icon name="insights" size={21} onPress={() => rit(item._id, item.year)} /> */}
-              </View>
-            </View>
-          </ListItem>
-        ))}
-      </Card>
-    </ScrollView>
+    </View>
   );
 }
-
-// .color1 { #b32c33 };
-// .color2 { #d48888 };
-// .color3 { #982e35 };
-// .color4 { #876c6f };
-// .color5 { #bcbcc3 };

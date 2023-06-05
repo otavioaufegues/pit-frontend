@@ -21,7 +21,7 @@ export default function PIT({ route, navigation }) {
       (async () => {
         setIsLoading(true);
         try {
-          const pitlist = await api.listPIT(year);
+          const pitlist = await api.listPIT(year.year);
           setPIT(pitlist.data);
         } catch (e) {
           setIsLoading(false);
@@ -37,8 +37,7 @@ export default function PIT({ route, navigation }) {
       bottomDivider
       onPress={() => {
         navigation.navigate('UpdatePITScreen', {
-          pitId: item._id,
-          year: year,
+          year: year.year,
         });
       }}
     >
@@ -73,7 +72,7 @@ export default function PIT({ route, navigation }) {
             paddingBottom: 10,
           }}
         >
-          PITs enviados {year}
+          PITs enviados {year.year}
         </Text>
         <View
           style={{
@@ -86,13 +85,13 @@ export default function PIT({ route, navigation }) {
           <Button
             title="Adicionar novo plano (PIT)"
             onPress={() =>
-              navigation.navigate('CreatePITScreen', { year: year })
+              navigation.navigate('CreatePITScreen', { year: year.year })
             }
           />
           <Button
             title="Estatísticas"
             onPress={() =>
-              navigation.navigate('pitChartsScreen', { year: year })
+              navigation.navigate('pitChartsScreen', { year: year.year })
             }
           />
         </View>

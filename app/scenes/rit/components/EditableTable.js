@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   tableHeader: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#000',
+    borderBottomColor: '#222',
     marginBottom: 10,
   },
   headerCell: {
