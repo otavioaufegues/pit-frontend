@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ListItem, Icon } from 'react-native-elements';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import ActivityListItem from './listItens/ActivityListItem';
 import Loading from './Loading';
 import { useAuth } from '../../providers/auth';
@@ -55,17 +55,14 @@ export default function RIT({ route, navigation }) {
       activityId: item._id,
       description: item.description,
       details: item.details,
-      setLoading,
+      activityCategoryId: item.category,
     });
   };
 
-  const createItem = (item) => {
+  const createItem = () => {
     navigation.navigate('ActivityFormScreen', {
-      categoryId: item._id,
-      categoryDetails: item.details,
       yearId: yearId,
       year: year,
-      setLoading,
     });
   };
 
@@ -96,19 +93,13 @@ export default function RIT({ route, navigation }) {
             }
           }}
         >
-          <Icon color="#b22d30" name={`${item.axisIcon}`} size={21} />
+          <Icon color="#b22d30" name={`${item.axis.icon}`} size={21} />
 
           <ListItem.Content>
             <ListItem.Title style={styles.categoryDescription}>
               {item.description}
             </ListItem.Title>
           </ListItem.Content>
-          <Icon
-            color="#b22d30"
-            name="add-circle"
-            size={21}
-            onPress={() => createItem(item)}
-          />
         </TouchableOpacity>
       }
     >
@@ -119,6 +110,12 @@ export default function RIT({ route, navigation }) {
   return (
     <SafeAreaProvider>
       <ScrollView style={styles.container}>
+        <TouchableOpacity
+          style={styles.addRowButton}
+          onPress={() => createItem()}
+        >
+          <Text style={styles.addRowButtonText}>Adicionar atividade</Text>
+        </TouchableOpacity>
         {loading ? <Loading /> : activitiesByCategory.map(renderCategory)}
       </ScrollView>
     </SafeAreaProvider>

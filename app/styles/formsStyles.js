@@ -9,6 +9,12 @@ export default StyleSheet.create({
     // paddingBottom: 30,
     backgroundColor: '#fff',
   },
+  
+  subtitle: {
+    fontSize: 20,
+    marginBottom: 5,
+  },
+
   view: {
     flex: 1,
     paddingHorizontal: 16,
@@ -54,10 +60,8 @@ export default StyleSheet.create({
   },
 
   actionsButtons: {
-    width: '100%',
-    paddingLeft: 16,
-    paddingRight: 16,
-    marginBottom: 15,
+    padding: 10,
+    backgroundColor: '#fff',
   },
 
   space: {
@@ -85,4 +89,10 @@ export default StyleSheet.create({
   },
 
   headerRightTitle: {},
+
+  dropDownPicker: {
+    marginBottom: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+  },
 });

@@ -194,7 +194,7 @@ export default function Router() {
             <Stack.Screen
               name="ActivityFormScreen"
               component={ActivityFormScreen}
-              options={{ title: 'Atividade' }}
+              options={{ title: 'Cadastro e atividade' }}
             />
 
             <Stack.Screen

@@ -92,4 +92,19 @@ export default StyleSheet.create({
   categoryDescription: {
     paddingLeft: 15,
   },
+
+  addRowButton: {
+    backgroundColor: '#d48888',
+    paddingHorizontal: 20,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
+    alignSelf: 'flex-start',
+    borderRadius: 5,
+  },
+  addRowButtonText: {
+    fontSize: 18,
+    color: '#fff',
+  },
 });

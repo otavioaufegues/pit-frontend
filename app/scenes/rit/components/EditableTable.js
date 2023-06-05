@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 const EditableTable = ({ data, columns, onTableDataChange }) => {
   const handleCellChange = (rowIndex, columnIndex, value) => {
@@ -20,11 +21,25 @@ const EditableTable = ({ data, columns, onTableDataChange }) => {
     onTableDataChange(updatedTableData);
   };
 
+  const handleRemoveRow = () => {
+    const updatedTableData = [...data];
+    updatedTableData.splice(data.length - 1, 1);
+    onTableDataChange(updatedTableData);
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.addRowButton} onPress={handleAddRow}>
-        <Text style={styles.addRowButtonText}>Novo campo</Text>
-      </TouchableOpacity>
+      <View style={styles.buttons}>
+        <TouchableOpacity style={styles.addRowButton} onPress={handleAddRow}>
+          <Text style={styles.addRowButtonText}>Novo campo</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.removeRowButton}
+          onPress={handleRemoveRow}
+        >
+          <Icon color="#fff" name="delete-forever" size={22} />
+        </TouchableOpacity>
+      </View>
       <View style={styles.tableHeader}>
         {columns.map((column, columnIndex) => (
           <Text key={columnIndex} style={styles.headerCell}>
@@ -56,6 +71,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
   },
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
   tableHeader: {
     flexDirection: 'row',
     borderBottomWidth: 1,
@@ -84,8 +103,18 @@ const styles = StyleSheet.create({
     padding: 8,
     alignItems: 'center',
     marginTop: 10,
+    marginRight: 10,
     width: '40%',
     alignSelf: 'flex-end',
+    borderRadius: 5,
+  },
+  removeRowButton: {
+    backgroundColor: '#f44',
+    padding: 6,
+    alignItems: 'center',
+    marginTop: 10,
+    alignSelf: 'flex-end',
+    borderRadius: 5,
   },
   addRowButtonText: {
     fontWeight: 'bold',
@@ -94,8 +123,3 @@ const styles = StyleSheet.create({
 });
 
 export default EditableTable;
-// .color1 { #b32c33 };
-// .color2 { #d48888 };
-// .color3 { #982e35 };
-// .color4 { #876c6f };
-// .color5 { #bcbcc3 };

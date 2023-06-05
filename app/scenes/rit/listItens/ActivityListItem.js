@@ -1,12 +1,17 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions} from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import {ListItem, Icon, Button} from 'react-native-elements';
+import { ListItem, Icon, Button } from 'react-native-elements';
 import styles from '../../../styles/styles';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-export default function ActivityListItem({item, handleShow, handleDelete, navigation}) {
+export default function ActivityListItem({
+  item,
+  handleShow,
+  handleDelete,
+  navigation,
+}) {
   const leftSwipe = () => {
     return (
       <View style={styles.actions}>
@@ -18,7 +23,12 @@ export default function ActivityListItem({item, handleShow, handleDelete, naviga
   const rightSwipe = () => {
     return (
       <View style={styles.actions}>
-        <Icon name="delete-forever" size={21} color="red" onPress={handleDelete} />
+        <Icon
+          name="delete-forever"
+          size={21}
+          color="red"
+          onPress={handleDelete}
+        />
       </View>
     );
   };
@@ -31,7 +41,12 @@ export default function ActivityListItem({item, handleShow, handleDelete, naviga
   return (
     <Swipeable renderRightActions={rightSwipe} renderLeftActions={leftSwipe}>
       <ListItem bottomDivider key={`itm${item._id}`}>
-        <Icon color="#bdbfc1" style={styles.iconActivity} name="check-circle" size={21} />
+        <Icon
+          color="#3fbf61"
+          style={styles.iconActivity}
+          name="done"
+          size={24}
+        />
         <ListItem.Content>
           <ListItem.Title>{item.description}</ListItem.Title>
           {/* <ListItem.Subtitle>{item.details.periodo}</ListItem.Subtitle>*/}

@@ -82,17 +82,27 @@ export async function getUsersByDepartmentService(year) {
   }
 }
 
-export async function getActivitiesCountByCategoryByDepartmentService(year, departmentId) {
+export async function getActivitiesCountByCategoryByDepartmentService(
+  year,
+  departmentId,
+) {
   try {
-    return await axios.get(`${c.GET_ACTIVITY_COUNT_CATEGORY_DEPARTMENT}/${year}/${departmentId}`);
+    return await axios.get(
+      `${c.GET_ACTIVITY_COUNT_CATEGORY_DEPARTMENT}/${year}/${departmentId}`,
+    );
   } catch (e) {
     console.log(e);
   }
 }
 
-export async function getActivitiesCountByAxisByDepartmentService(year, departmentId) {
+export async function getActivitiesCountByAxisByDepartmentService(
+  year,
+  departmentId,
+) {
   try {
-    return await axios.get(`${c.GET_ACTIVITY_COUNT_AXIS_DEPARTMENT}/${year}/${departmentId}`);
+    return await axios.get(
+      `${c.GET_ACTIVITY_COUNT_AXIS_DEPARTMENT}/${year}/${departmentId}`,
+    );
   } catch (e) {
     console.log(e);
   }
@@ -100,7 +110,9 @@ export async function getActivitiesCountByAxisByDepartmentService(year, departme
 
 export async function getActivitiesCountByCategoryByInstitutionService(year) {
   try {
-    return await axios.get(`${c.GET_ACTIVITY_COUNT_CATEGORY_INSTITUTION}/${year}`);
+    return await axios.get(
+      `${c.GET_ACTIVITY_COUNT_CATEGORY_INSTITUTION}/${year}`,
+    );
   } catch (e) {
     console.log(e);
   }
@@ -114,9 +126,14 @@ export async function getActivitiesCountByAxisByInstitutionService(year) {
   }
 }
 
-export async function getActivitiesCountByCategoryByUserService(year, username) {
+export async function getActivitiesCountByCategoryByUserService(
+  year,
+  username,
+) {
   try {
-    return await axios.get(`${c.GET_ACTIVITY_COUNT_CATEGORY_USER}/${year}/${username}`);
+    return await axios.get(
+      `${c.GET_ACTIVITY_COUNT_CATEGORY_USER}/${year}/${username}`,
+    );
   } catch (e) {
     console.log(e);
   }
@@ -124,15 +141,22 @@ export async function getActivitiesCountByCategoryByUserService(year, username) 
 
 export async function getActivitiesCountByAxisByUserService(year, username) {
   try {
-    return await axios.get(`${c.GET_ACTIVITY_COUNT_AXIS_USER}/${year}/${username}`);
+    return await axios.get(
+      `${c.GET_ACTIVITY_COUNT_AXIS_USER}/${year}/${username}`,
+    );
   } catch (e) {
     console.log(e);
   }
 }
 
-export async function getActivitiesCountByAxisByUserByDepartmentService(year, departmentId) {
+export async function getActivitiesCountByAxisByUserByDepartmentService(
+  year,
+  departmentId,
+) {
   try {
-    return await axios.get(`${c.GET_ACTIVITY_COUNT_AXIS_BY_USER_BY_DEPARTMENT}/${year}/${departmentId}`);
+    return await axios.get(
+      `${c.GET_ACTIVITY_COUNT_AXIS_BY_USER_BY_DEPARTMENT}/${year}/${departmentId}`,
+    );
   } catch (e) {
     console.log(e);
   }
@@ -148,7 +172,9 @@ export async function getActivitiesCountByAxisAllUserService(year) {
 
 export async function getActivitiesCountByAxisAllDepartmentService(year) {
   try {
-    return await axios.get(`${c.GET_ACTIVITY_COUNT_AXIS_ALL_DEPARTMENT}/${year}`);
+    return await axios.get(
+      `${c.GET_ACTIVITY_COUNT_AXIS_ALL_DEPARTMENT}/${year}`,
+    );
   } catch (e) {
     console.log(e);
   }
@@ -162,9 +188,15 @@ export async function getActivitiesCountByAxisEvolutionService() {
   }
 }
 
-export async function updateDetailsActivityService(activityId, detailsActivity) {
+export async function updateDetailsActivityService(
+  activityId,
+  detailsActivity,
+) {
   try {
-    return await axios.put(`${c.UPDATE_DETAILS_ACTIVITY}/${activityId}`, detailsActivity);
+    return await axios.put(
+      `${c.UPDATE_DETAILS_ACTIVITY}/${activityId}`,
+      detailsActivity,
+    );
   } catch (e) {
     console.log(e);
   }
@@ -206,8 +238,18 @@ export async function addDetailsActivityService(year) {
 // importação dados lattes
 export async function addDetailsActivityLattesService(formData) {
   try {
-    const headers = {'Content-Type': 'multipart/form-data'};
-    return await axios.post(c.ADD_DETAILS_ACTIVITY_LATTES, formData, {headers: headers});
+    const headers = { 'Content-Type': 'multipart/form-data' };
+    return await axios.post(c.ADD_DETAILS_ACTIVITY_LATTES, formData, {
+      headers: headers,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function getCategory(categoryId) {
+  try {
+    return await axios.get(`${c.GET_CATEGORY}/${categoryId}`);
   } catch (e) {
     console.log(e);
   }

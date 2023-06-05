@@ -4,29 +4,23 @@ import {
   Button,
   Text,
   TextInput,
-  SafeAreaView,
   ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { useForm, useController } from 'react-hook-form';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useAuth } from '../../providers/auth';
 import * as api from '../../services/rit';
 import formsStyles from '../../styles/formsStyles';
 import EditableTable from './components/EditableTable';
+import { useAsync } from '../../hooks/useAsync';
+import { getDropdownList } from '../../services/pit';
+import { getCategory } from '../../services/rit';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function ActivityForm({ route, navigation }) {
-  const {
-    categoryDetails,
-    activityId,
-    details,
-    categoryId,
-    description,
-    setLoading,
-    yearId,
-    year,
-  } = route.params;
-  const [data, setData] = useState();
-  const [dataCategory, setDataCategory] = useState();
+  const { activityId, details, description, yearId, year, activityCategoryId } =
+    route.params;
+  const [data, setData] = useState([]);
   const {
     register,
     setValue,
@@ -36,25 +30,21 @@ export default function ActivityForm({ route, navigation }) {
   } = useForm();
   const { getAuthState } = useAuth();
 
+  const [open, setOpen] = useState(false);
+  const [items, setItems] = useState([]);
+  const [category, setCategory] = useState();
+
+  const { response, status } = useAsync(() => getDropdownList());
+  const {
+    execute: executeCategory,
+    response: responseCategory,
+    status: statusCategory,
+  } = useAsync(() => getCategory(category), false);
+
   const createActivity = async (userId, activity) => {
     try {
       await api.createActivityService(userId, activity);
-      setLoading(true);
       navigation.navigate('RITScreen', { activity: activity, year: year });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const createDetailsActivity = async (activityId, data) => {
-    try {
-      const newData = dataCategory.map(function (val) {
-        return {
-          key: val[0].value,
-          value: val[1].value,
-        };
-      });
-      await api.createDetailsActivityService(activityId, newData);
     } catch (e) {
       console.log(e);
     }
@@ -63,7 +53,6 @@ export default function ActivityForm({ route, navigation }) {
   const updateActivity = async (activityId, userId, activity) => {
     try {
       await api.updateActivityService(activityId, userId, activity);
-      setLoading(true);
       navigation.navigate('RITScreen', activity);
     } catch (error) {
       console.log(error);
@@ -86,15 +75,15 @@ export default function ActivityForm({ route, navigation }) {
     const { user } = await getAuthState();
     let activity = {};
     if (description == undefined) {
-      const newData = dataCategory.map(function (val) {
+      const newData = data.map(function (val) {
         return {
-          key: val[0].value,
-          value: val[1].value,
+          key: val[0],
+          value: val[1],
         };
       });
       activity = {
         description: dataForm.description,
-        category: categoryId,
+        category: category,
         year: yearId,
         newData: newData,
         department: user.department,
@@ -109,31 +98,40 @@ export default function ActivityForm({ route, navigation }) {
     }
   };
 
-  const onCancel = () => {
-    navigation.navigate('RITScreen');
-  };
+  useEffect(() => {
+    if (category) executeCategory();
+  }, [category]);
+
+  useEffect(() => {
+    if (status === 'success') {
+      setItems(response.data);
+    }
+  }, [status]);
+
+  useEffect(() => {
+    if (statusCategory === 'success') {
+      const details = responseCategory.data.category.details;
+      const detailsArray = Object.entries(details).map((v) => [v[0], v[1]]);
+      const mergedArray = Object.assign(detailsArray, data);
+      setData(mergedArray);
+    }
+  }, [statusCategory]);
 
   useEffect(() => {
     register('description');
   }, [register]);
 
   useEffect(() => {
+    if (activityCategoryId) setCategory(activityCategoryId);
     if (details != undefined)
       setData(Object.entries(details).map((v) => [v[0], v[1]]));
-    if (categoryDetails != undefined)
-      setDataCategory(Object.entries(categoryDetails).map((v) => [v[0], v[1]]));
   }, []);
-
-  useEffect(() => {
-    console.log('mudou', data, dataCategory);
-  }, [data, dataCategory]);
 
   const TextField = ({ label, name, control, placeholder }) => {
     const { field } = useController({
       control,
-      defaultValue: description || '',
+      defaultValue: description ?? '',
       name,
-      rules: { required: true },
     });
 
     return (
@@ -154,79 +152,80 @@ export default function ActivityForm({ route, navigation }) {
   const tableColumns = ['Campo', 'Valor'];
 
   return (
-    <ScrollView style={formsStyles.container}>
-      <TextField
-        control={control}
-        name={'description'}
-        label={'Descrição'}
-        placeholder={'Digite uma descrição'}
-        onChangeText={(text) => setValue('description', text)}
-        aria-invalid={errors.description ? 'true' : 'false'}
-      />
-      {errors.description && errors.description.type === 'required' && (
-        <Text style={formsStyles.errorMessages}>Campo obrigatório</Text>
-      )}
-      {dataCategory && (
-        <EditableTable
-          data={dataCategory}
-          columns={tableColumns}
-          onTableDataChange={setDataCategory}
-        />
-      )}
-      {data && (
-        <EditableTable
-          data={data}
-          columns={tableColumns}
-          onTableDataChange={setData}
-        />
-      )}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 25}
+    >
+      <ScrollView style={formsStyles.container}>
+        <View>
+          <Text style={formsStyles.subtitle}>
+            Escolha a categoria da atividade
+          </Text>
+          {status === 'success' && (
+            <DropDownPicker
+              searchable={true}
+              loading={status === 'idle'}
+              open={open}
+              value={category}
+              items={items}
+              setOpen={setOpen}
+              setValue={setCategory}
+              setItems={setItems}
+              listMode="MODAL"
+              mode="SIMPLE"
+              style={formsStyles.dropDownPicker}
+              translation={{
+                PLACEHOLDER: 'Selecione',
+                SEARCH_PLACEHOLDER: 'Buscar categoria...',
+                SELECTED_ITEMS_COUNT_TEXT: {
+                  1: '1 categoria selecionada',
+                  n: '{count} categorias selecionadas',
+                },
+                NOTHING_TO_SHOW: 'Nenhuma categoria para mostrar',
+              }}
+              listParentLabelStyle={{
+                fontWeight: 'bold',
+              }}
+              listChildContainerStyle={{
+                paddingLeft: 5,
+                padding: 5,
+                borderBottomWidth: 1,
+                borderBottomColor: '#ddd',
+                height: 'auto',
+                minHeight: 40,
+              }}
+              selectedItemContainerStyle={{
+                backgroundColor: '#d48888',
+              }}
+            />
+          )}
+        </View>
+        {category && (
+          <TextField
+            control={control}
+            name={'description'}
+            label={'Descrição'}
+            placeholder={'Digite uma descrição'}
+            onChangeText={(text) => setValue('description', text)}
+            aria-invalid={errors.description ? 'true' : 'false'}
+          />
+        )}
+        {category && (
+          <EditableTable
+            data={data}
+            columns={tableColumns}
+            onTableDataChange={setData}
+          />
+        )}
+      </ScrollView>
       <View style={formsStyles.actionsButtons}>
         <Button
           color="#b22d30"
           onPress={handleSubmit(onSubmit)}
           title={'Salvar'}
         />
-        <View style={formsStyles.space}></View>
-        <Button
-          color="#bdbfc1"
-          onPress={handleSubmit(onCancel)}
-          title={'Cancelar'}
-        />
       </View>
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
-
-  //           onCellChange={(value, column, row, unique_id) => {
-  //             dataCategory[row][column].value = value;
-  //             if (
-  //               dataCategory[row][0].value.length === 0 &&
-  //               dataCategory[row][1].value.length === 0
-  //             ) {
-  //               let arr = [...dataCategory];
-  //               const a = arr.splice(arr.indexOf(row), 1);
-  //               setData(arr);
-  //             }
-  //           }}
-  //           onColumnChange={(value, oldVal, newVal) => {}}
-  //         onCellChange={(value, column, row, unique_id) => {
-  //           data[row][column].value = value;
-  //           if (
-  //             data[row][0].value.length === 0 &&
-  //             data[row][1].value.length === 0
-  //           ) {
-  //             data.splice(row, 1);
-  //           }
-  //         }}
-  //     <Button
-  //       onPress={handleSubmit(onSubmit)}
-  //       title={'Salvar'}
-  //     />
-  //     <Button
-  //       onPress={handleSubmit(onCancel)}
-  //       title={'Cancelar'}
-  //     />
-
-  //   </View>
-  // </View>
-  // );
 }
