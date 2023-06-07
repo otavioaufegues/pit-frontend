@@ -13,7 +13,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 export default CreatePIT = ({ route, navigation }) => {
   const { state } = useAuth();
   const { axis } = useDataProvider();
-  const { year } = route.params;
+  const { year, yearId } = route.params;
   const regime = state.user.regime;
   const [inputRegime, setInputRegime] = useState(0);
   const [pit, setPit] = useState(
@@ -76,7 +76,7 @@ export default CreatePIT = ({ route, navigation }) => {
         dt_inicial: dt_inicial,
         dt_final: dt_final,
         activities: activities,
-        year: year,
+        year: yearId,
       });
       navigation.navigate('PITScreen');
     } catch (e) {

@@ -38,6 +38,7 @@ export default function PIT({ route, navigation }) {
       onPress={() => {
         navigation.navigate('UpdatePITScreen', {
           year: year.year,
+          yearId: year._id,
         });
       }}
     >
@@ -85,7 +86,10 @@ export default function PIT({ route, navigation }) {
           <Button
             title="Adicionar novo plano (PIT)"
             onPress={() =>
-              navigation.navigate('CreatePITScreen', { year: year.year })
+              navigation.navigate('CreatePITScreen', {
+                year: year.year,
+                yearId: year._id,
+              })
             }
           />
           <Button
