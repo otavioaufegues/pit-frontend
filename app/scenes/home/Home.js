@@ -160,129 +160,127 @@ export default function Home({ route, navigation }) {
         />
       </Card>
 
-      <Card>
-        <View style={styles.buttonHomeView}>
-          <Button
-            title="PIT"
-            icon={{
-              name: 'tasks',
-              type: 'font-awesome',
-              size: 20,
-              color: '#222',
-            }}
-            iconRight
-            iconContainerStyle={{ marginLeft: 10 }}
-            titleStyle={styles.buttonHomeTitle}
-            buttonStyle={styles.buttonHome}
-            containerStyle={styles.buttonHomeContainer}
-            onPress={() => project(yearValue)}
-          />
-          <Button
-            title="RIT"
-            icon={{
-              name: 'list-ul',
-              type: 'font-awesome',
-              size: 20,
-              color: '#222',
-            }}
-            iconRight
-            iconContainerStyle={{
-              marginLeft: 10,
-            }}
-            titleStyle={styles.buttonHomeTitle}
-            buttonStyle={styles.buttonHome}
-            containerStyle={styles.buttonHomeContainer}
-            onPress={() => rit(yearValue._id, yearValue.year)}
-          />
-          <Button
-            title="Resultado"
-            icon={{
-              name: 'bar-chart',
-              type: 'font-awesome',
-              size: 20,
-              color: '#222',
-            }}
-            iconRight
-            iconContainerStyle={{ marginLeft: 5 }}
-            titleStyle={styles.buttonHomeTitle}
-            buttonStyle={styles.buttonHome}
-            containerStyle={styles.buttonHomeContainer}
-          />
-          <Button
-            title="Comentários"
-            icon={{
-              name: 'comments-o',
-              type: 'font-awesome',
-              size: 20,
-              color: '#222',
-            }}
-            iconRight
-            iconContainerStyle={{ marginLeft: 5 }}
-            titleStyle={styles.buttonHomeTitle}
-            buttonStyle={styles.buttonHome}
-            containerStyle={styles.buttonHomeContainer}
-          />
-          <Button
-            title="Professores"
-            icon={{
-              name: 'users',
-              type: 'font-awesome',
-              size: 20,
-              color: '#222',
-            }}
-            iconRight
-            iconContainerStyle={{ marginLeft: 5 }}
-            titleStyle={styles.buttonHomeTitle}
-            buttonStyle={styles.buttonHome}
-            containerStyle={styles.buttonHomeContainer}
-          />
-          <Button
-            title="UFJF"
-            icon={{
-              name: 'university',
-              type: 'font-awesome',
-              size: 20,
-              color: '#222',
-            }}
-            iconRight
-            iconContainerStyle={{ marginLeft: 10 }}
-            titleStyle={styles.buttonHomeTitle}
-            buttonStyle={styles.buttonHome}
-            containerStyle={styles.buttonHomeContainer}
-            onPress={() => institution()}
-          />
-          <Button
-            title="Evolução"
-            icon={{
-              name: 'line-chart',
-              type: 'font-awesome',
-              size: 20,
-              color: '#222',
-            }}
-            iconRight
-            iconContainerStyle={{ marginLeft: 5 }}
-            titleStyle={styles.buttonHomeTitle}
-            buttonStyle={styles.buttonHome}
-            containerStyle={styles.buttonHomeContainer}
-            onPress={() => evolution()}
-          />
-          <Button
-            title="Importar"
-            icon={{
-              name: 'download',
-              type: 'font-awesome',
-              size: 20,
-              color: '#222',
-            }}
-            iconRight
-            iconContainerStyle={{ marginLeft: 5 }}
-            titleStyle={styles.buttonHomeTitle}
-            buttonStyle={styles.buttonHome}
-            containerStyle={styles.buttonHomeContainer}
-            onPress={() => importData()}
-          />
-        </View>
-      </Card>
+      <View style={styles.buttonHomeView}>
+        <Button
+          title="PIT"
+          icon={{
+            name: 'tasks',
+            type: 'font-awesome',
+            size: 20,
+            color: '#222',
+          }}
+          iconRight
+          iconContainerStyle={{ marginLeft: 10 }}
+          titleStyle={styles.buttonHomeTitle}
+          buttonStyle={styles.buttonHome}
+          containerStyle={styles.buttonHomeContainer}
+          onPress={() => project(yearValue)}
+        />
+        <Button
+          title="RIT"
+          icon={{
+            name: 'list-ul',
+            type: 'font-awesome',
+            size: 20,
+            color: '#222',
+          }}
+          iconRight
+          iconContainerStyle={{
+            marginLeft: 10,
+          }}
+          titleStyle={styles.buttonHomeTitle}
+          buttonStyle={styles.buttonHome}
+          containerStyle={styles.buttonHomeContainer}
+          onPress={() => rit(yearValue._id, yearValue.year)}
+        />
+        <Button
+          title="Resultado"
+          icon={{
+            name: 'bar-chart',
+            type: 'font-awesome',
+            size: 20,
+            color: '#222',
+          }}
+          iconRight
+          iconContainerStyle={{ marginLeft: 5 }}
+          titleStyle={styles.buttonHomeTitle}
+          buttonStyle={styles.buttonHome}
+          containerStyle={styles.buttonHomeContainer}
+        />
+        <Button
+          title="Comentários"
+          icon={{
+            name: 'comments-o',
+            type: 'font-awesome',
+            size: 20,
+            color: '#222',
+          }}
+          iconRight
+          iconContainerStyle={{ marginLeft: 5 }}
+          titleStyle={styles.buttonHomeTitle}
+          buttonStyle={styles.buttonHome}
+          containerStyle={styles.buttonHomeContainer}
+        />
+        <Button
+          title="Professores"
+          icon={{
+            name: 'users',
+            type: 'font-awesome',
+            size: 20,
+            color: '#222',
+          }}
+          iconRight
+          iconContainerStyle={{ marginLeft: 5 }}
+          titleStyle={styles.buttonHomeTitle}
+          buttonStyle={styles.buttonHome}
+          containerStyle={styles.buttonHomeContainer}
+        />
+        <Button
+          title="UFJF"
+          icon={{
+            name: 'university',
+            type: 'font-awesome',
+            size: 20,
+            color: '#222',
+          }}
+          iconRight
+          iconContainerStyle={{ marginLeft: 10 }}
+          titleStyle={styles.buttonHomeTitle}
+          buttonStyle={styles.buttonHome}
+          containerStyle={styles.buttonHomeContainer}
+          onPress={() => institution()}
+        />
+        <Button
+          title="Evolução"
+          icon={{
+            name: 'line-chart',
+            type: 'font-awesome',
+            size: 20,
+            color: '#222',
+          }}
+          iconRight
+          iconContainerStyle={{ marginLeft: 5 }}
+          titleStyle={styles.buttonHomeTitle}
+          buttonStyle={styles.buttonHome}
+          containerStyle={styles.buttonHomeContainer}
+          onPress={() => evolution()}
+        />
+        <Button
+          title="Importar"
+          icon={{
+            name: 'download',
+            type: 'font-awesome',
+            size: 20,
+            color: '#222',
+          }}
+          iconRight
+          iconContainerStyle={{ marginLeft: 5 }}
+          titleStyle={styles.buttonHomeTitle}
+          buttonStyle={styles.buttonHome}
+          containerStyle={styles.buttonHomeContainer}
+          onPress={() => importData()}
+        />
+      </View>
     </View>
   );
 }

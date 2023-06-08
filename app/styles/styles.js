@@ -97,6 +97,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     flexWrap: 'wrap',
     width: '100%',
+    padding: 15,
   },
 
   // year list

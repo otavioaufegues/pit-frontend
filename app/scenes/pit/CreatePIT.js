@@ -216,13 +216,12 @@ export default CreatePIT = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 5,
+    padding: 3,
     marginBottom: 10,
   },
   section: {
     backgroundColor: '#fff',
-    padding: 5,
-    borderRadius: 5,
+    padding: 10,
     borderColor: '#ddd',
     borderWidth: 1,
     marginBottom: 8,
