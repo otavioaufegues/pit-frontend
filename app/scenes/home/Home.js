@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import { Button, Card, ListItem, Icon, Avatar } from 'react-native-elements';
+import {
+  Button,
+  Card,
+  ListItem,
+  Icon,
+  Avatar,
+  Divider,
+} from 'react-native-elements';
 
 import { useAuth } from '../../providers/auth';
 import { updateProfile } from '../../services/auth';
@@ -66,6 +73,10 @@ export default function Home({ route, navigation }) {
     navigation.navigate('RITScreen', { yearId: yearId, year: year });
   };
 
+  const result = (year) => {
+    navigation.navigate('ResultScreen', { year: year, user: user });
+  };
+
   const institution = () => {
     navigation.navigate('InstitutionScreen');
   };
@@ -116,8 +127,7 @@ export default function Home({ route, navigation }) {
           <Text style={styles.text}>{departmentData.name}</Text>
         )}
       </Card>
-
-      <Card>
+      <View style={styles.buttonHomeView}>
         <Text style={styles.subtitle}>Escolha o ano das atividades</Text>
         <DropDownPicker
           loading={loading}
@@ -158,8 +168,8 @@ export default function Home({ route, navigation }) {
             setYearValue(years.find((obj) => obj._id === value));
           }}
         />
-      </Card>
-
+      </View>
+      <Divider inset insetType="middle" />
       <View style={styles.buttonHomeView}>
         <Button
           title="PIT"
@@ -167,7 +177,7 @@ export default function Home({ route, navigation }) {
             name: 'tasks',
             type: 'font-awesome',
             size: 20,
-            color: '#222',
+            color: '#444',
           }}
           iconRight
           iconContainerStyle={{ marginLeft: 10 }}
@@ -182,7 +192,7 @@ export default function Home({ route, navigation }) {
             name: 'list-ul',
             type: 'font-awesome',
             size: 20,
-            color: '#222',
+            color: '#444',
           }}
           iconRight
           iconContainerStyle={{
@@ -199,13 +209,14 @@ export default function Home({ route, navigation }) {
             name: 'bar-chart',
             type: 'font-awesome',
             size: 20,
-            color: '#222',
+            color: '#444',
           }}
           iconRight
           iconContainerStyle={{ marginLeft: 5 }}
           titleStyle={styles.buttonHomeTitle}
           buttonStyle={styles.buttonHome}
           containerStyle={styles.buttonHomeContainer}
+          onPress={() => result(yearValue)}
         />
         <Button
           title="Comentários"
@@ -213,7 +224,7 @@ export default function Home({ route, navigation }) {
             name: 'comments-o',
             type: 'font-awesome',
             size: 20,
-            color: '#222',
+            color: '#444',
           }}
           iconRight
           iconContainerStyle={{ marginLeft: 5 }}
@@ -227,7 +238,7 @@ export default function Home({ route, navigation }) {
             name: 'users',
             type: 'font-awesome',
             size: 20,
-            color: '#222',
+            color: '#444',
           }}
           iconRight
           iconContainerStyle={{ marginLeft: 5 }}
@@ -241,7 +252,7 @@ export default function Home({ route, navigation }) {
             name: 'university',
             type: 'font-awesome',
             size: 20,
-            color: '#222',
+            color: '#444',
           }}
           iconRight
           iconContainerStyle={{ marginLeft: 10 }}
@@ -256,7 +267,7 @@ export default function Home({ route, navigation }) {
             name: 'line-chart',
             type: 'font-awesome',
             size: 20,
-            color: '#222',
+            color: '#444',
           }}
           iconRight
           iconContainerStyle={{ marginLeft: 5 }}
@@ -271,7 +282,7 @@ export default function Home({ route, navigation }) {
             name: 'download',
             type: 'font-awesome',
             size: 20,
-            color: '#222',
+            color: '#444',
           }}
           iconRight
           iconContainerStyle={{ marginLeft: 5 }}

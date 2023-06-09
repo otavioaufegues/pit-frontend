@@ -21,7 +21,7 @@ const pitCharts = ({ route, navigation }) => {
                 name="chevron-right"
                 type="material"
                 size={20}
-                color="#555"
+                color="#444"
               />
             }
             iconRight
@@ -40,7 +40,7 @@ const pitCharts = ({ route, navigation }) => {
                 name="chevron-right"
                 type="material"
                 size={20}
-                color="#555"
+                color="#444"
               />
             }
             iconRight
@@ -59,7 +59,7 @@ const pitCharts = ({ route, navigation }) => {
                 name="chevron-right"
                 type="material"
                 size={20}
-                color="#555"
+                color="#444"
               />
             }
             iconRight
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     textAlign: 'left',
-    color: '#555',
+    color: '#444',
   },
   divider: {
     marginVertical: 15,

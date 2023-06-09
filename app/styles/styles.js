@@ -77,14 +77,14 @@ export default StyleSheet.create({
 
   buttonHome: {
     backgroundColor: '#fff',
-    borderColor: '#222',
-    color: '#222',
+    borderColor: '#444',
+    color: '#444',
     height: 60,
     borderWidth: 1,
     borderRadius: 5,
   },
 
-  buttonHomeTitle: { fontWeight: '400', color: '#222' },
+  buttonHomeTitle: { fontWeight: '400', color: '#444' },
 
   buttonHomeContainer: {
     width: '48%',

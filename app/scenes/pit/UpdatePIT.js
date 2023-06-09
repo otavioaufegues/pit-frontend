@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   },
   defaultFont: {
     fontSize: 18,
-    color: '#222',
+    color: '#444',
   },
   limitColor: {
     color: '#d00000',

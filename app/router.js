@@ -42,6 +42,9 @@ import ReportEvolutionScreen from './scenes/rit/reports/ReportEvolution';
 //IMPORT LOADING SCREEN
 import AuthLoading from './scenes/auth/AuthLoading';
 
+//IMPORT RESULT SCENES
+import ResultScreen from './scenes/result/ResultScreen';
+
 import AuthProvider from './providers/auth';
 import { AppProvider } from './providers/app';
 
@@ -268,6 +271,12 @@ export default function Router() {
               name="ImportActivityScreen"
               component={ImportActivityScreen}
               options={{ title: 'Importações' }}
+            />
+
+            <Stack.Screen
+              name="ResultScreen"
+              component={ResultScreen}
+              options={{ title: 'Resultado' }}
             />
           </Stack.Navigator>
         </NavigationContainer>
