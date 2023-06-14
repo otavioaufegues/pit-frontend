@@ -55,7 +55,7 @@ const ResultScreen = ({ route }) => {
             padding: 10,
           }}
         >
-          Resultado de {year.year}
+          Resultado {year.year} de {user.firstName}
         </Text>
         {status === 'pending' && <Loading />}
         {status === 'success' &&

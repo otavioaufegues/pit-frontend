@@ -1,10 +1,18 @@
 import axios from 'axios';
 
-import { GET_RESULT } from '../constants';
+import { GET_RESULT, GET_TEACHERS } from '../constants';
 
 export async function getResult(yearId, userId) {
   try {
     return await axios.get(GET_RESULT + '/' + userId + '/' + yearId);
+  } catch (e) {
+    throw handler(e);
+  }
+}
+
+export async function getTeachers() {
+  try {
+    return await axios.get(GET_TEACHERS);
   } catch (e) {
     throw handler(e);
   }

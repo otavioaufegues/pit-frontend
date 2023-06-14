@@ -23,7 +23,7 @@ export default CreatePIT = ({ route, navigation }) => {
     }, {}),
   );
 
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date(year, 0, 1));
   const [show, setShow] = useState(false);
 
   const [open, setOpen] = useState(false);

@@ -73,6 +73,10 @@ export default function Home({ route, navigation }) {
     navigation.navigate('RITScreen', { yearId: yearId, year: year });
   };
 
+  const teacher = (year) => {
+    navigation.navigate('TeacherScreen', { year: year });
+  };
+
   const result = (year) => {
     navigation.navigate('ResultScreen', { year: year, user: user });
   };
@@ -245,6 +249,7 @@ export default function Home({ route, navigation }) {
           titleStyle={styles.buttonHomeTitle}
           buttonStyle={styles.buttonHome}
           containerStyle={styles.buttonHomeContainer}
+          onPress={() => teacher(yearValue)}
         />
         <Button
           title="UFJF"

@@ -45,6 +45,9 @@ import AuthLoading from './scenes/auth/AuthLoading';
 //IMPORT RESULT SCENES
 import ResultScreen from './scenes/result/ResultScreen';
 
+//import teachers scene
+import TeacherScreen from './scenes/teacher/TeacherScreen';
+
 import AuthProvider from './providers/auth';
 import { AppProvider } from './providers/app';
 
@@ -277,6 +280,12 @@ export default function Router() {
               name="ResultScreen"
               component={ResultScreen}
               options={{ title: 'Resultado' }}
+            />
+
+            <Stack.Screen
+              name="TeacherScreen"
+              component={TeacherScreen}
+              options={{ title: 'Professores' }}
             />
           </Stack.Navigator>
         </NavigationContainer>
