@@ -47,7 +47,7 @@ const TeacherScreen = ({ route, navigation }) => {
           })
         }
       >
-        <ListItem bottomDivider key={`itm${item._id}`}>
+        <ListItem bottomDivider key={`res${item._id}`}>
           <Icon
             color="#1B74EC"
             style={styles.iconActivity}
@@ -56,6 +56,46 @@ const TeacherScreen = ({ route, navigation }) => {
           />
           <ListItem.Content>
             <ListItem.Title>Ver resultado</ListItem.Title>
+          </ListItem.Content>
+        </ListItem>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('pitChartsScreen', {
+            year: year,
+            user: item,
+          })
+        }
+      >
+        <ListItem bottomDivider key={`est${item._id}`}>
+          <Icon
+            color="#FF8C00"
+            style={styles.iconActivity}
+            name="pie-chart"
+            size={22}
+          />
+          <ListItem.Content>
+            <ListItem.Title>Ver estatísticas</ListItem.Title>
+          </ListItem.Content>
+        </ListItem>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('pitChartsScreen', {
+            year: year,
+            user: item,
+          })
+        }
+      >
+        <ListItem bottomDivider key={`mes${item._id}`}>
+          <Icon
+            color="#0d730d"
+            style={styles.iconActivity}
+            name="message"
+            size={22}
+          />
+          <ListItem.Content>
+            <ListItem.Title>Enviar comentário</ListItem.Title>
           </ListItem.Content>
         </ListItem>
       </TouchableOpacity>

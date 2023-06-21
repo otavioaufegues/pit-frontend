@@ -48,6 +48,9 @@ import ResultScreen from './scenes/result/ResultScreen';
 //import teachers scene
 import TeacherScreen from './scenes/teacher/TeacherScreen';
 
+//import teachers scene
+import CommentScreen from './scenes/comment/CommentScreen';
+
 import AuthProvider from './providers/auth';
 import { AppProvider } from './providers/app';
 
@@ -286,6 +289,12 @@ export default function Router() {
               name="TeacherScreen"
               component={TeacherScreen}
               options={{ title: 'Professores' }}
+            />
+
+            <Stack.Screen
+              name="CommentScreen"
+              component={CommentScreen}
+              options={{ title: 'Comentários' }}
             />
           </Stack.Navigator>
         </NavigationContainer>

@@ -24,7 +24,7 @@ const ResultScreen = ({ route }) => {
     miss: {
       icon: 'highlight-remove',
       color: 'red',
-      description: 'Atividades do PIT desta categoria não aparecem no RIT!',
+      description: 'Categoria selecionada no PIT sem atividades!',
     },
     plus: {
       icon: 'warning',
