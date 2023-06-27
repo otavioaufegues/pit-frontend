@@ -5,6 +5,7 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    padding: 15,
   },
 
   text: {
@@ -13,7 +14,7 @@ export default StyleSheet.create({
 
   subtitle: {
     fontSize: 20,
-    marginBottom: 5,
+    marginBottom: 10,
   },
 
   view: {
@@ -24,11 +25,13 @@ export default StyleSheet.create({
 
   //home
   textUser: {
-    fontSize: 24,
+    fontSize: 20,
   },
 
   viewCard: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingBottom: 15,
   },
 
   viewFirstColumn: {
@@ -97,7 +100,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     flexWrap: 'wrap',
     width: '100%',
-    padding: 15,
+    paddingTop: 5,
+    paddingBottom: 15,
   },
 
   // year list
@@ -126,10 +130,5 @@ export default StyleSheet.create({
   addRowButtonText: {
     fontSize: 18,
     color: '#fff',
-  },
-
-  dropDownPicker: {
-    paddingHorizontal: 15,
-    paddingVertical: 5,
   },
 });

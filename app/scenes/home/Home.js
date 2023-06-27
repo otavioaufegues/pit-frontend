@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, Text, View } from 'react-native';
-import {
-  Button,
-  Card,
-  ListItem,
-  Icon,
-  Avatar,
-  Divider,
-} from 'react-native-elements';
+import { Text, View } from 'react-native';
+import { Button, Icon, Divider } from 'react-native-elements';
 
 import { useAuth } from '../../providers/auth';
 import { updateProfile } from '../../services/auth';
@@ -111,34 +104,29 @@ export default function Home({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <Card>
-        <View style={styles.viewCard}>
-          <View style={styles.viewFirstColumn}>
-            <Icon name="person" size={70} />
-          </View>
-          <Text
-            style={styles.textUser}
-            onPress={() => updateProfile()}
-          >{`${user.firstName} ${user.lastName}`}</Text>
+      <View style={styles.viewCard}>
+        <Text
+          style={styles.textUser}
+        >{`Bem vindo, ${user.firstName} ${user.lastName}`}</Text>
 
-          <View style={styles.viewThirdColumn}>
-            <Icon
-              name="exit-to-app"
-              size={21}
-              onPress={() => {
-                handleLogout();
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: 'LoginScreen' }],
-                });
-              }}
-            />
-          </View>
+        <View style={styles.viewThirdColumn}>
+          <Icon
+            name="exit-to-app"
+            size={21}
+            onPress={() => {
+              handleLogout();
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'LoginScreen' }],
+              });
+            }}
+          />
         </View>
         {departmentData && (
           <Text style={styles.text}>{departmentData.name}</Text>
         )}
-      </Card>
+      </View>
+      <Divider />
       <View style={styles.buttonHomeView}>
         <Text style={styles.subtitle}>Escolha o ano das atividades</Text>
         <DropDownPicker
@@ -151,7 +139,6 @@ export default function Home({ route, navigation }) {
           setItems={setItems}
           listMode="MODAL"
           mode="SIMPLE"
-          style={styles.dropDownPicker}
           translation={{
             PLACEHOLDER: 'Selecione',
             SEARCH_PLACEHOLDER: 'Buscar Anos...',
@@ -181,7 +168,7 @@ export default function Home({ route, navigation }) {
           }}
         />
       </View>
-      <Divider inset insetType="middle" />
+      <Divider />
       <View style={styles.buttonHomeView}>
         <Button
           title="PIT"
@@ -304,6 +291,21 @@ export default function Home({ route, navigation }) {
           buttonStyle={styles.buttonHome}
           containerStyle={styles.buttonHomeContainer}
           onPress={() => importData()}
+        />
+        <Button
+          title="Meus dados"
+          icon={{
+            name: 'account-circle',
+            type: 'MaterialIcons',
+            size: 20,
+            color: '#444',
+          }}
+          iconRight
+          iconContainerStyle={{ marginLeft: 5 }}
+          titleStyle={styles.buttonHomeTitle}
+          buttonStyle={styles.buttonHome}
+          containerStyle={styles.buttonHomeContainer}
+          onPress={() => updateProfile()}
         />
       </View>
     </View>
