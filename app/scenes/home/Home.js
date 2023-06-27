@@ -81,8 +81,12 @@ export default function Home({ route, navigation }) {
     navigation.navigate('ResultScreen', { year: year, user: user });
   };
 
-  const comment = (year) => {
-    navigation.navigate('CommentScreen', { year: year, user: user });
+  const comment = (year, department) => {
+    navigation.navigate('CommentScreen', {
+      year: year,
+      user: user,
+      coordinator: department.coordinator,
+    });
   };
 
   const institution = () => {
@@ -239,7 +243,7 @@ export default function Home({ route, navigation }) {
           titleStyle={styles.buttonHomeTitle}
           buttonStyle={styles.buttonHome}
           containerStyle={styles.buttonHomeContainer}
-          onPress={() => comment(yearValue)}
+          onPress={() => comment(yearValue, departmentData)}
         />
         <Button
           title="Professores"

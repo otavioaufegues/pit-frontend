@@ -18,9 +18,17 @@ export async function getTeachers() {
   }
 }
 
-export async function getMessages(yearId) {
+export async function getMessages(yearId, userId) {
   try {
-    return await axios.get(GET_MESSAGES + '/' + yearId);
+    return await axios.get(GET_MESSAGES + '/' + userId + '/' + yearId);
+  } catch (e) {
+    throw handler(e);
+  }
+}
+
+export async function sendMessage(payload) {
+  try {
+    return await axios.post(GET_MESSAGES, payload);
   } catch (e) {
     throw handler(e);
   }

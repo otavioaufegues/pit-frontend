@@ -19,23 +19,56 @@ import moment from 'moment';
 const Comment = ({ route, navigation }) => {
   const { state, handleLogout } = useAuth();
   const user = state.user;
-  const { year } = route.params;
-  const { execute, response, status, error } = useAsync(() =>
-    getMessages(year._id),
-  );
+  const { year, coordinator } = route.params;
   const [messageText, setMessageText] = useState('');
+  const [messages, setMessages] = useState([]);
 
-  const handleSend = () => {
-    // sendMessage(year._id, messageText);
-    // setMessageText('');
+  const { execute, response, status } = useAsync(() =>
+    getMessages(year._id, coordinator),
+  );
+
+  useEffect(() => {
+    if (status === 'success') {
+      setMessages(response.data.messages);
+    }
+  }, [status]);
+
+  const handleSend = async () => {
+    if (messageText === '') {
+      return false;
+    }
+    let data = {
+      receiver: coordinator,
+      content: messageText,
+      timestamp: new Date(),
+      isRead: false,
+      isArchived: false,
+      year: year._id,
+    };
+    await sendMessage(data);
+    setMessageText('');
+    await execute();
   };
 
   const renderMessages = (message, index) => {
+    const isSentByUser = message.sender._id === user._id;
+    const messageContainerStyle = isSentByUser
+      ? styles.sentMessageContainer
+      : styles.receivedMessageContainer;
+    const messageTextStyle = isSentByUser
+      ? styles.sentMessageText
+      : styles.receivedMessageText;
+
     return (
-      <View key={index} style={styles.messageContainer}>
-        <Text style={styles.messageText}>{message.content}</Text>
+      <View
+        key={index}
+        style={[styles.messageContainer, messageContainerStyle]}
+      >
+        <Text style={[styles.messageText, messageTextStyle]}>
+          {message.content}
+        </Text>
         <Text style={styles.messageAuthor}>
-          {message.sender._id === user._id ? 'Eu' : message.sender.firstName}
+          {isSentByUser ? 'Eu' : message.sender.firstName}
         </Text>
         <Text style={styles.messageTimestamp}>
           {moment.utc(message.timestamp).format('DD/MM/YYYY')}
@@ -44,16 +77,12 @@ const Comment = ({ route, navigation }) => {
     );
   };
 
-  useEffect(() => {
-    console.log(error);
-  }, [status]);
-
   return (
     <SafeAreaProvider>
       <KeyboardAvoidingView style={styles.container}>
         <ScrollView style={styles.messagesContainer}>
           {status === 'pending' && <Loading />}
-          {status === 'success' && response.data.messages.map(renderMessages)}
+          {status === 'success' && messages.map(renderMessages)}
         </ScrollView>
         <View style={styles.inputContainer}>
           <TextInput
@@ -85,7 +114,6 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 4,
   },
   messageAuthor: {
@@ -112,7 +140,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   sendButton: {
-    backgroundColor: 'blue',
+    backgroundColor: '#b32c33',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -120,6 +148,25 @@ const styles = StyleSheet.create({
   sendButtonText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+
+  sentMessageContainer: {
+    width: '95%',
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 8,
+    padding: 10,
+    alignSelf: 'flex-end',
+    alignItems: 'flex-end',
+  },
+  receivedMessageContainer: {
+    width: '95%',
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 8,
+    padding: 10,
+    alignSelf: 'flex-start',
+    alignItems: 'flex-start',
   },
 });
 
