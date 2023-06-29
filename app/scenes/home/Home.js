@@ -77,8 +77,7 @@ export default function Home({ route, navigation }) {
   const comment = (year, department) => {
     navigation.navigate('CommentScreen', {
       year: year,
-      user: user,
-      coordinator: department.coordinator,
+      receiver: department.coordinator,
     });
   };
 

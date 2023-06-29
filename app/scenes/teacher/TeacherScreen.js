@@ -81,9 +81,9 @@ const TeacherScreen = ({ route, navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate('pitChartsScreen', {
+          navigation.navigate('CommentScreen', {
             year: year,
-            user: item,
+            receiver: item._id,
           })
         }
       >

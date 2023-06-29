@@ -7,7 +7,6 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 import { getMessages, sendMessage } from '../../services/user';
 import { useAsync } from '../../hooks/useAsync';
@@ -16,15 +15,15 @@ import Loading from '../rit/Loading';
 import { useAuth } from '../../providers/auth';
 import moment from 'moment';
 
-const Comment = ({ route, navigation }) => {
-  const { state, handleLogout } = useAuth();
+const Comment = ({ route }) => {
+  const { state } = useAuth();
   const user = state.user;
-  const { year, coordinator } = route.params;
+  const { year, receiver } = route.params;
   const [messageText, setMessageText] = useState('');
   const [messages, setMessages] = useState([]);
 
   const { execute, response, status } = useAsync(() =>
-    getMessages(year._id, coordinator),
+    getMessages(year._id, receiver),
   );
 
   useEffect(() => {
@@ -38,7 +37,7 @@ const Comment = ({ route, navigation }) => {
       return false;
     }
     let data = {
-      receiver: coordinator,
+      receiver: receiver,
       content: messageText,
       timestamp: new Date(),
       isRead: false,
