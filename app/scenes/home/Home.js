@@ -70,6 +70,10 @@ export default function Home({ route, navigation }) {
     navigation.navigate('TeacherScreen', { year: year });
   };
 
+  const department = (year) => {
+    navigation.navigate('reportPitDepartment', { year: year.year });
+  };
+
   const result = (year) => {
     navigation.navigate('ResultScreen', { year: year, user: user });
   };
@@ -106,7 +110,7 @@ export default function Home({ route, navigation }) {
       <View style={styles.viewCard}>
         <Text
           style={styles.textUser}
-        >{`Bem vindo, ${user.firstName} ${user.lastName}`}</Text>
+        >{`Olá, ${user.firstName} ${user.lastName}`}</Text>
 
         <View style={styles.viewThirdColumn}>
           <Icon
@@ -245,6 +249,21 @@ export default function Home({ route, navigation }) {
           buttonStyle={styles.buttonHome}
           containerStyle={styles.buttonHomeContainer}
           onPress={() => teacher(yearValue)}
+        />
+        <Button
+          title="Estatísticas Departamento"
+          icon={{
+            name: 'pie-chart',
+            type: 'font-awesome',
+            size: 20,
+            color: '#444',
+          }}
+          iconRight
+          iconContainerStyle={{ marginLeft: 5 }}
+          titleStyle={styles.buttonHomeTitle}
+          buttonStyle={styles.buttonHome}
+          containerStyle={styles.buttonHomeContainer}
+          onPress={() => department(yearValue)}
         />
         <Button
           title="UFJF"

@@ -50,17 +50,21 @@ export async function getYearPit(year) {
   }
 }
 
-export async function getComparePit(year) {
+export async function getComparePit(year, userId) {
   try {
-    return await axios.get(BASE_URL + 'pit/compare/' + (year - 1) + '/' + year);
+    return await axios.get(
+      BASE_URL + 'pit/compare/' + userId + '/' + (year - 1) + '/' + year,
+    );
   } catch (e) {
     throw handler(e);
   }
 }
 
-export async function getCompareDepartment(year) {
+export async function getCompareDepartment(year, userId) {
   try {
-    return await axios.get(BASE_URL + 'pit/compare/department/' + year);
+    return await axios.get(
+      BASE_URL + 'pit/compare/department/' + userId + '/' + year,
+    );
   } catch (e) {
     throw handler(e);
   }

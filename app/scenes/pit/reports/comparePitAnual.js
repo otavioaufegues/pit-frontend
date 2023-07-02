@@ -15,9 +15,9 @@ import Loading from '../../rit/Loading';
 import { useDataProvider } from '../../../providers/app';
 
 export default function ComparePitAnual({ route }) {
-  const { year } = route.params;
+  const { year, userId } = route.params;
   const { axis } = useDataProvider();
-  const { response, status } = useAsync(() => getComparePit(year));
+  const { response, status } = useAsync(() => getComparePit(year, userId));
 
   const [data, setData] = useState();
   const [maxima, setMaxima] = useState();

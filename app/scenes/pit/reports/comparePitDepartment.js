@@ -15,9 +15,11 @@ import Loading from '../../rit/Loading';
 import { useDataProvider } from '../../../providers/app';
 
 export default function comparePitDepartment({ route }) {
-  const { year } = route.params;
+  const { year, userId } = route.params;
   const { axis } = useDataProvider();
-  const { response, status } = useAsync(() => getCompareDepartment(year));
+  const { response, status } = useAsync(() =>
+    getCompareDepartment(year, userId),
+  );
 
   const [data, setData] = useState();
   const [maxima, setMaxima] = useState();
@@ -68,7 +70,7 @@ export default function comparePitDepartment({ route }) {
             width={330}
           >
             <VictoryGroup
-              colorScale={['green', 'gold', 'cyan']}
+              colorScale={['#b22d30', 'blue', 'cyan']}
               style={{ data: { fillOpacity: 0.2, strokeWidth: 1 } }}
             >
               {data.map((data, i) => {
@@ -113,7 +115,7 @@ export default function comparePitDepartment({ route }) {
             style={{
               width: 10,
               height: 10,
-              backgroundColor: 'gold',
+              backgroundColor: '#b22d30',
               marginRight: 5,
             }}
           />
@@ -124,7 +126,7 @@ export default function comparePitDepartment({ route }) {
             style={{
               width: 10,
               height: 10,
-              backgroundColor: 'green',
+              backgroundColor: 'blue',
               marginRight: 5,
             }}
           />

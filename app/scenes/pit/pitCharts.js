@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Button, Card, Icon } from 'react-native-elements';
 
 const pitCharts = ({ route, navigation }) => {
-  const { year } = route.params;
+  const { year, userId } = route.params;
   return (
     <>
       <Card>
@@ -11,7 +11,10 @@ const pitCharts = ({ route, navigation }) => {
           <Button
             title={`Comparar PIT ${year} x ${year - 1}`}
             onPress={() =>
-              navigation.navigate('comparePitAnual', { year: year })
+              navigation.navigate('comparePitAnual', {
+                year: year,
+                userId: userId,
+              })
             }
             buttonStyle={styles.transparentButton}
             titleStyle={styles.buttonTitle}
@@ -30,7 +33,10 @@ const pitCharts = ({ route, navigation }) => {
           <Button
             title="Seu PIT x PIT do Departamento"
             onPress={() =>
-              navigation.navigate('comparePitDepartment', { year: year })
+              navigation.navigate('comparePitDepartment', {
+                year: year,
+                userId: userId,
+              })
             }
             buttonStyle={styles.transparentButton}
             titleStyle={styles.buttonTitle}
@@ -46,24 +52,6 @@ const pitCharts = ({ route, navigation }) => {
             iconRight
           />
           <Card.Divider style={styles.divider} />
-          <Button
-            title="PIT do departamento"
-            onPress={() =>
-              navigation.navigate('reportPitDepartment', { year: year })
-            }
-            buttonStyle={styles.transparentButton}
-            titleStyle={styles.buttonTitle}
-            type="clear"
-            icon={
-              <Icon
-                name="chevron-right"
-                type="material"
-                size={20}
-                color="#444"
-              />
-            }
-            iconRight
-          />
         </View>
       </Card>
     </>
