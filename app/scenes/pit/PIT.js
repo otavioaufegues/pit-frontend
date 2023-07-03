@@ -40,6 +40,7 @@ export default function PIT({ route, navigation }) {
         navigation.navigate('UpdatePITScreen', {
           year: year.year,
           yearId: year._id,
+          pitId: item._id,
         });
       }}
     >
@@ -50,6 +51,13 @@ export default function PIT({ route, navigation }) {
         </ListItem.Subtitle>
       </ListItem.Content>
       <ListItem.Chevron />
+    </ListItem>
+  );
+  const renderActivities = ({ item, index }) => (
+    <ListItem bottomDivider>
+      <ListItem.Content>
+        <ListItem.Subtitle>{item.description}</ListItem.Subtitle>
+      </ListItem.Content>
     </ListItem>
   );
 
@@ -68,14 +76,6 @@ export default function PIT({ route, navigation }) {
           justifyContent: 'flex-start',
         }}
       >
-        <Text
-          h4
-          style={{
-            paddingBottom: 10,
-          }}
-        >
-          PITs enviados {year.year}
-        </Text>
         <View
           style={{
             width: '100%',
@@ -109,14 +109,27 @@ export default function PIT({ route, navigation }) {
             <Text h4>Loading...</Text>
           </Card>
         ) : pit.pits.length > 0 ? (
-          <Card width={'100%'} height={'80%'}>
-            <FlatList
-              data={pit.pits}
-              renderItem={renderEntry}
-              keyExtractor={(entry) => entry._id}
-              style={{ height: '95%' }}
-            ></FlatList>
-          </Card>
+          <>
+            <Card width={'100%'}>
+              <Card.Title> PITs enviados {year.year}</Card.Title>
+              <Card.Divider />
+              <FlatList
+                data={pit.pits}
+                renderItem={renderEntry}
+                keyExtractor={(entry) => entry._id}
+              ></FlatList>
+            </Card>
+            {pit.allActivities.length > 0}
+            <Card width={'100%'}>
+              <Card.Title>Atividades a realizar</Card.Title>
+              <Card.Divider />
+              <FlatList
+                data={pit.allActivities}
+                renderItem={renderActivities}
+                keyExtractor={(entry) => entry._id}
+              ></FlatList>
+            </Card>
+          </>
         ) : (
           <Card width={'100%'}>
             <Text h5>Nenhum PIT Enviado</Text>
