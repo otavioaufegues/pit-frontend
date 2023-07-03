@@ -31,7 +31,7 @@ const pitCharts = ({ route, navigation }) => {
           />
           <Card.Divider style={styles.divider} />
           <Button
-            title="Seu PIT x PIT do Departamento"
+            title="PIT x Departamento"
             onPress={() =>
               navigation.navigate('comparePitDepartment', {
                 year: year,

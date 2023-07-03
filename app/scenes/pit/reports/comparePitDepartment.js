@@ -119,7 +119,7 @@ export default function comparePitDepartment({ route }) {
               marginRight: 5,
             }}
           />
-          <Text>Seu PIT {year}</Text>
+          <Text>PIT {year}</Text>
         </View>
         <View style={styles.caption}>
           <View
