@@ -173,6 +173,41 @@ export default function Home({ route, navigation }) {
       </View>
       <Divider />
       <View style={styles.buttonHomeView}>
+        {user.isCoordinator && (
+          <>
+            <Button
+              title="Professores"
+              icon={{
+                name: 'users',
+                type: 'font-awesome',
+                size: 20,
+                color: '#444',
+              }}
+              iconRight
+              iconContainerStyle={{ marginLeft: 5 }}
+              titleStyle={styles.buttonHomeTitle}
+              buttonStyle={styles.buttonHome}
+              containerStyle={styles.buttonHomeContainer}
+              onPress={() => teacher(yearValue)}
+            />
+
+            <Button
+              title="Estatísticas Departamento"
+              icon={{
+                name: 'pie-chart',
+                type: 'font-awesome',
+                size: 20,
+                color: '#444',
+              }}
+              iconRight
+              iconContainerStyle={{ marginLeft: 5 }}
+              titleStyle={styles.buttonHomeTitle}
+              buttonStyle={styles.buttonHome}
+              containerStyle={styles.buttonHomeContainer}
+              onPress={() => department(yearValue)}
+            />
+          </>
+        )}
         <Button
           title="PIT"
           icon={{
@@ -188,6 +223,7 @@ export default function Home({ route, navigation }) {
           containerStyle={styles.buttonHomeContainer}
           onPress={() => project(yearValue)}
         />
+
         <Button
           title="RIT"
           icon={{
@@ -205,6 +241,7 @@ export default function Home({ route, navigation }) {
           containerStyle={styles.buttonHomeContainer}
           onPress={() => rit(yearValue._id, yearValue.year)}
         />
+
         <Button
           title="Resultado"
           icon={{
@@ -220,6 +257,7 @@ export default function Home({ route, navigation }) {
           containerStyle={styles.buttonHomeContainer}
           onPress={() => result(yearValue)}
         />
+
         <Button
           title="Comentários"
           icon={{
@@ -235,36 +273,7 @@ export default function Home({ route, navigation }) {
           containerStyle={styles.buttonHomeContainer}
           onPress={() => comment(yearValue, departmentData)}
         />
-        <Button
-          title="Professores"
-          icon={{
-            name: 'users',
-            type: 'font-awesome',
-            size: 20,
-            color: '#444',
-          }}
-          iconRight
-          iconContainerStyle={{ marginLeft: 5 }}
-          titleStyle={styles.buttonHomeTitle}
-          buttonStyle={styles.buttonHome}
-          containerStyle={styles.buttonHomeContainer}
-          onPress={() => teacher(yearValue)}
-        />
-        <Button
-          title="Estatísticas Departamento"
-          icon={{
-            name: 'pie-chart',
-            type: 'font-awesome',
-            size: 20,
-            color: '#444',
-          }}
-          iconRight
-          iconContainerStyle={{ marginLeft: 5 }}
-          titleStyle={styles.buttonHomeTitle}
-          buttonStyle={styles.buttonHome}
-          containerStyle={styles.buttonHomeContainer}
-          onPress={() => department(yearValue)}
-        />
+
         <Button
           title="UFJF"
           icon={{
@@ -280,6 +289,7 @@ export default function Home({ route, navigation }) {
           containerStyle={styles.buttonHomeContainer}
           onPress={() => institution()}
         />
+
         <Button
           title="Evolução"
           icon={{
@@ -295,6 +305,7 @@ export default function Home({ route, navigation }) {
           containerStyle={styles.buttonHomeContainer}
           onPress={() => evolution()}
         />
+
         <Button
           title="Importar"
           icon={{
@@ -310,6 +321,7 @@ export default function Home({ route, navigation }) {
           containerStyle={styles.buttonHomeContainer}
           onPress={() => importData()}
         />
+
         <Button
           title="Meus dados"
           icon={{
