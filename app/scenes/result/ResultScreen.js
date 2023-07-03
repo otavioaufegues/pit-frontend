@@ -59,10 +59,10 @@ const ResultScreen = ({ route }) => {
         </Text>
         {status === 'pending' && <Loading />}
         {status === 'success' &&
-          axis.map((axis, axisId) => (
+          axis.map((axis) => (
             <ListItem.Accordion
-              key={`ax-${axisId}`}
-              isExpanded={axisCollapsed.has(axisId)}
+              key={`ax-${axis._id}`}
+              isExpanded={axisCollapsed.has(axis._id)}
               bottomDivider
               content={
                 <>
@@ -77,24 +77,36 @@ const ResultScreen = ({ route }) => {
                 </>
               }
               onPress={() => {
-                if (axisCollapsed.has(axisId)) {
-                  axisCollapsed.delete(axisId);
+                if (axisCollapsed.has(axis._id)) {
+                  axisCollapsed.delete(axis._id);
                   setAxisCollapsed(new Set(axisCollapsed));
                 } else {
-                  axisCollapsed.add(axisId);
+                  axisCollapsed.add(axis._id);
                   setAxisCollapsed(new Set(axisCollapsed));
                 }
               }}
             >
               {activitiesResult
                 .filter((activity) => activity.axis.ref === axis.ref)
-                .map((activity, activityId) => (
-                  <ListItem bottomDivider noIcon>
+                .map((activity) => (
+                  <ListItem key={`it-${activity._id}`} bottomDivider noIcon>
                     <ListItem.Content>
                       <Text>{activity.description}</Text>
-                      <ListItem.Subtitle>
+                      <ListItem.Subtitle key={`sub-${activity._id}`}>
                         {ActivityStatus[activity.status].description}
                       </ListItem.Subtitle>
+                      {activity.activities &&
+                        activity.activities.map((ritActivity) => (
+                          <ListItem.Subtitle key={`sb-${ritActivity._id}`}>
+                            <Icon
+                              name="circle"
+                              size={8}
+                              color="gray"
+                              style={{ paddingHorizontal: 10 }}
+                            />
+                            {ritActivity.description}
+                          </ListItem.Subtitle>
+                        ))}
                     </ListItem.Content>
                     <Icon
                       name={ActivityStatus[activity.status].icon}
