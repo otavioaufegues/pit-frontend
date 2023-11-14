@@ -126,7 +126,7 @@ export default function Home({ route, navigation }) {
           />
         </View>
         {departmentData && (
-          <Text style={styles.text}>{departmentData.name}</Text>
+          <Text style={styles.textDepartment}>{departmentData.name}</Text>
         )}
       </View>
       <Divider />

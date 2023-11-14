@@ -28,6 +28,12 @@ export default StyleSheet.create({
     fontSize: 20,
   },
 
+  textDepartment: {
+    fontSize: 16,
+    width: '100%',
+    paddingTop: 8,
+  },
+
   viewCard: {
     flexDirection: 'row',
     flexWrap: 'wrap',
